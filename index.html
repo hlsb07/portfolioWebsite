@@ -64,14 +64,6 @@
               </span>
             </div>
           </div>
-          <div class="hero-media" aria-hidden="true">
-            <div class="hero-card">
-              <div class="hero-card-line"></div>
-              <div class="hero-card-line short"></div>
-              <div class="hero-card-line"></div>
-              <div class="hero-card-line short"></div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -83,44 +75,45 @@
     </header>
 
     <div class="about-grid">
-      <div>
-        <figure class="portrait">
-          <img
-            src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=640&auto=format&fit=crop"
-            alt="Portrait von mir (Platzhalter)"
-          />
-          <figcaption class="muted">Platzhalter-Portrait – wird ersetzt.</figcaption>
-        </figure>
+        <div class="about-img">
+          <figure class="portrait">
+            <img
+              src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=640&auto=format&fit=crop"
+              alt="Portrait von mir (Platzhalter)"
+            />
+            <figcaption class="muted">Platzhalter-Portrait – wird ersetzt.</figcaption>
+          </figure>
+        </div>
+        <div class="about-content">
+          <p>
+            Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit
+            als SPS-Programmierer habe ich erkannt, dass meine Leidenschaft stärker in der
+            Softwareentwicklung liegt. Mich reizt besonders die kreative, interaktive und
+            konzeptionelle Arbeit mit Software.
+          </p>
+  
+          <p>
+            Beruflich entwickle ich aktuell SPS-Steuerungen für Industriemaschinen.
+            Privat arbeite ich an verschiedenen Projekten, von Hausautomation mit ioBroker, Arduino und MQTT bis hin zur smarten Camper-Steuerung mit Raspberry Pi.
+          </p>
+  
+          <p>
+            Mein aktuelles Projekt: eine Web-App, die Routen für Camper berechnet und
+            Campingplätze, Freizeitaktivitäten und Orte aus Google Maps kombiniert.
+            Dadurch vertiefe ich mein Wissen in modernen Softwarearchitekturen,
+            Frameworks und Datenbanken.
+          </p>
+  
+          <div class="hero-cta"><a class="btn primary" href="#projekte">Zu meinen Projekten</a></div>
+        </div>
 
-        <p>
-          Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit
-          als SPS-Programmierer habe ich erkannt, dass meine Leidenschaft stärker in der
-          Softwareentwicklung liegt. Mich reizt besonders die kreative, interaktive und
-          konzeptionelle Arbeit mit Software.
-        </p>
-
-        <p>
-          Beruflich entwickle ich aktuell SPS-Steuerungen für Industriemaschinen.
-          Privat arbeite ich an verschiedenen Projekten, von Hausautomation mit ioBroker, Arduino und MQTT bis hin zur smarten Camper-Steuerung mit Raspberry Pi.
-        </p>
-
-        <p>
-          Mein aktuelles Projekt: eine Web-App, die Routen für Camper berechnet und
-          Campingplätze, Freizeitaktivitäten und Orte aus Google Maps kombiniert.
-          Dadurch vertiefe ich mein Wissen in modernen Softwarearchitekturen,
-          Frameworks und Datenbanken.
-        </p>
-
-        <div class="hero-cta"><a class="btn primary" href="#projekte">Zu meinen Projekten</a></div>
-      </div>
-
-      <ul class="about-list" aria-label="Highlights">
+      <!-- <ul class="about-list" aria-label="Highlights">
         <li>Duales Studium Elektrotechnik – Automation (B. Eng.)</li>
         <li>Berufserfahrung in SPS-Programmierung & Antriebstechnik</li>
         <li>Private Software- & IoT-Projekte (Smart Home, Camper, Web-App)</li>
         <li>Erste Kenntnisse in HTML, CSS, JavaScript, APIs & Datenbanken</li>
         <li>Analytisch, lernfreudig und technisch vielseitig</li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </section>
@@ -158,101 +151,86 @@
         </div>
       </section>
 
-      <!-- Kompetenzen -->
-      <section id="kompetenzen" class="section skills" aria-label="Kompetenzen">
-        <div class="container">
-          <header class="section-head">
-            <h2>Kompetenzen</h2>
-            <p>Was ich einbringe.</p>
-          </header>
-          <div class="skills-grid">
-            <article class="card">
-              <h3>Frontend</h3>
-              <ul>
-                <li>HTML5, Semantik, ARIA</li>
-                <li>CSS3, Flex/Grid, Responsivität</li>
-                <li>JavaScript (ES6+), TypeScript (Grundlagen)</li>
-                <li>React (Hooks), Zustand, Routing</li>
-              </ul>
-            </article>
-            <article class="card">
-              <h3>Tools & Workflow</h3>
-              <ul>
-                <li>Git, GitHub</li>
-                <li>VS Code, Debugging</li>
-                <li>Figma (Hand‑off), Design Tokens</li>
-                <li>Vite/NPM, Linting/Formatting</li>
-              </ul>
-            </article>
-            <article class="card">
-              <h3>PLC/OT Hintergrund</h3>
-              <ul>
-                <li>SPS: TIA Portal, TwinCAT</li>
-                <li>Schnittstellen: OPC UA, Feldbus</li>
-                <li>Testen, Fehlertoleranz, Safety‑Denken</li>
-                <li>Dokumentation & Nachvollziehbarkeit</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <!-- Projekte -->
       <section id="projekte" class="section projects" aria-label="Projekte">
         <div class="container">
           <header class="section-head">
             <h2>Ausgewählte Projekte</h2>
-            <p>Praxisnah, fokussiert, nachvollziehbar.</p>
+            <p>Der Weg der mich in die Softwareentwicklung führt.</p>
           </header>
 
-          <div class="project-grid">
-            <article class="project card">
-              <div class="project-meta">
-                <span class="tag">React</span>
-                <span class="tag">API</span>
-              </div>
-              <h3>Projekt 1: Dashboard für Sensordaten</h3>
-              <p>
-                Single‑Page App mit React. Visualisiert Live‑Daten, Filterung und
-                Caching. Fokus: klare Komponentenstruktur und Performance.
-              </p>
-              <div class="project-links">
-                <a href="#" aria-label="Live‑Demo">Live</a>
-                <a href="#" aria-label="Quellcode auf GitHub">Code</a>
-              </div>
-            </article>
+          <div class="feature-projects">
+            <article class="feature project--home">
+              <div class="feature-block">
+                <div class="feature-content">
+                  <header>
+                    <h3><i class="fa-solid fa-house-signal"></i> Hausautomation</h3>
+                    <p class="muted">Die Möglichkeiten im Smarthome-Bereich haben mich dazu inspiriert, mich mit der Softwareentwicklung zu beschäftigen.</p>
+                  </header>
+                  <p>
+                    Zentrale Steuerung, Dashboards und Benachrichtigungen.
+                  </p>
+                  <div class="project-links">
+                  <a href="#" class="btn">ioBroker</a>
+                  <a href="#" class="btn">MQTT</a>
+                  <a href="#" class="btn">NAS</a>
+                  </div> 
+                </div>              
+                <div class="feature-imagesection">
+                  <img src="images/Smarthome2.png" alt="">
 
-            <article class="project card">
-              <div class="project-meta">
-                <span class="tag">HTML</span>
-                <span class="tag">CSS</span>
-              </div>
-              <h3>Projekt 2: Komponenten‑Bibliothek</h3>
-              <p>
-                Sammlungen wiederverwendbarer UI‑Bausteine (Buttons, Karten, Modale)
-                mit Dokumentation und Beispielen. Fokus: Semantik & Accessibility.
-              </p>
-              <div class="project-links">
-                <a href="#" aria-label="Live‑Demo">Live</a>
-                <a href="#" aria-label="Quellcode auf GitHub">Code</a>
+                </div>
+                
               </div>
             </article>
+            <article class="feature project--camper">
+              <div class="feature-block">
+                
+                <div class="feature-imagesection">
+                  <img src="images/Smarthome2.png" alt="">
 
-            <article class="project card">
-              <div class="project-meta">
-                <span class="tag">JS</span>
-                <span class="tag">Testing</span>
-              </div>
-              <h3>Projekt 3: Formular‑Validierung</h3>
-              <p>
-                Clientseitige Validierung mit klaren Fehlermeldungen, Barrierefreiheit
-                und Tests. Fokus: zuverlässige User Experience.
-              </p>
-              <div class="project-links">
-                <a href="#" aria-label="Live‑Demo">Live</a>
-                <a href="#" aria-label="Quellcode auf GitHub">Code</a>
+                </div>
+                <div class="feature-content">
+                  <header>
+                    <h3><i class="fa-solid fa-caravan"></i> Smarte Campersteuerung</h3>
+                    <p class="muted">IoT-basierte Steuerung für Licht, Klima und Energiesysteme im Van.</p>
+                  </header>
+                  <p>
+                    Web-UI zur Visualisierung und Steuerung der Bord-Elektronik in Echtzeit.
+                    Raspberry Pi und ESP32 kommunizieren über MQTT/HTTP mit Sensoren und Aktoren.
+                  </p>
+                  <div class="project-links">
+                    <a href="#" class="btn">NodeRed</a>
+                    <a href="#" class="btn">Modbus RTU</a>
+                    <a href="#" class="btn">MQTT</a>
+                  </div>
+                </div>
               </div>
             </article>
+            <article class="feature project--route">
+                <div class="feature-block">
+                  <div class="feature-content">
+                    <header>
+                      <h3><i class="fa-solid fa-route"></i> Aktuelles Projekt: Roadtrip Route Planner</h3>
+                      <p class="muted">Aus dem Gedanken heraus, die richtige Anwendung im App Store nicht zu finden.</p>
+                    </header>
+                    <p>
+                      Plane und verwalte Roadtrips mit Drag & Drop, Ortssuche (Google Places) und interaktiver Leaflet‑Karte
+                      (Marker, Popups, Schnellnavigation). Export/Import via JSON. Mobile‑First Navigation.
+                    </p>
+                    <p>
+                    Backend: .NET 9 REST‑API (EF Core + PostgreSQL, AutoMapper, FluentValidation, NetTopologySuite), Swagger/OpenAPI.
+                    Frontend: ES6 Modules, Leaflet 1.9.4, SortableJS, Vanilla CSS, Font Awesome.
+                  </p>
+                  <div class="project-links">
+                    <a href="#" class="btn primary" aria-label="Live‑Demo">Live</a>
+                    <a href="#" class="btn" aria-label="Quellcode auf GitHub">Code</a>
+                  </div>
+                </div>
+                <div class="feature-imagesection">
+                  <img src="images/Smarthome3.png" alt="">
+                </div>
+              </article>
           </div>
 
           <h3 class="section-sub">Aktiv auf GitHub</h3>
@@ -301,17 +279,17 @@
               </div>
             </li>
             <li class="timeline-item">
-              <div class="time">2020 – 2024</div>
-              <div class="content">
-                <h3>Bachelor of Engineering – Elektrotechnik Automation (dual)</h3>
-                <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung, Schnittstellen.</p>
-              </div>
-            </li>
-            <li class="timeline-item">
               <div class="time">2024</div>
               <div class="content">
                 <h3>Bachelorarbeit</h3>
                 <p><em>Konzeptionierung einer Methode zur Erhöhung der Seitenregistergenauigkeit in Tiefdruckmaschinen für Dekorpapier</em> – Entwicklung einer Regelungsmethode zur automatisierten Anpassung von Trocknungsparametern; Umsetzung mit Lebbing und Praxistest beim Kunden.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="time">2020 – 2024</div>
+              <div class="content">
+                <h3>Bachelor of Engineering – Elektrotechnik Automation (dual)</h3>
+                <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung, Schnittstellen.</p>
               </div>
             </li>
             <li class="timeline-item">
