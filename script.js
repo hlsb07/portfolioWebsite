@@ -77,7 +77,7 @@
     return;
   }
 
-  const cacheKey = `gh-repos:${user}`;
+  const cacheKey = `gh-repos:${user}:${max}`;
   const cache = localStorage.getItem(cacheKey);
   if (cache) {
     try {
@@ -135,13 +135,13 @@
     const upd = updated.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
     const desc = r.description ? escapeHTML(r.description) : 'Ohne Beschreibung.';
     const lang = r.language ? `<span class="repo-lang"><span class="repo-dot"></span>${escapeHTML(r.language)}</span>` : '';
-    const stars = r.stars ? `<span class="repo-stars"><span class="star">★</span>${r.stars}</span>` : '';
-    const home = r.homepage ? `<a href="${escapeAttr(r.homepage)}" target="_blank" rel="noopener noreferrer">Live</a>` : '';
+    const stars = r.stars ? `<span class="repo-stars"><span class="star">★</span> ${r.stars}</span>` : '';
+    const home = r.homepage ? `<a href="${escapeAttr(r.homepage)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>` : '';
     return `
-      <article class="card repo-card">
+      <article class="github-featured-card">
         <div class="repo-head"><a href="${escapeAttr(r.html_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(r.name)}</a></div>
         <div class="repo-desc">${desc}</div>
-        <div class="repo-stats">${lang}${stars ? `<span>·</span>${stars}` : ''}<span>·</span><span>Aktualisiert ${upd}</span>${home ? `<span>·</span>${home}` : ''}</div>
+        <div class="repo-stats">${lang}${stars}${home}<span>Aktualisiert ${upd}</span></div>
       </article>`;
   }
 
