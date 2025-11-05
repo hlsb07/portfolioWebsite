@@ -2,25 +2,26 @@
 
 /* Design Tokens */
 :root {
-  --bg: #0b0c10;
-  --panel: #111218;
-  --text: #e7e9ee;
-  --muted: #b7bcc6;
-  --brand: #7c5cff;
-  --brand-2: #2dd4bf;
-  --line: #22232b;
+    --bg: #0b0c10;
+      --panel: #111218;
+        --text: #e7e9ee;
+          --muted: #b7bcc6;
+            --brand: #7c5cff;
+              --brand-2: #2dd4bf;
+                --line: #22232b;
 
-  --radius: 14px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
-  --container: 1100px;
+                  --radius: 14px;
+                    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+                      --container: 1100px;
 
-  --step-0: clamp(0.88rem, 0.82rem + 0.25vw, 1rem);
-  --step-1: clamp(1.00rem, 0.90rem + 0.50vw, 1.20rem);
-  --step-2: clamp(1.20rem, 1.05rem + 0.80vw, 1.50rem);
-  --step-3: clamp(1.50rem, 1.28rem + 1.20vw, 1.95rem);
-  --step-4: clamp(1.90rem, 1.55rem + 1.80vw, 2.60rem);
+                        --step-0: clamp(0.88rem, 0.82rem + 0.25vw, 1rem);
+                          --step-1: clamp(1.00rem, 0.90rem + 0.50vw, 1.20rem);
+                            --step-2: clamp(1.20rem, 1.05rem + 0.80vw, 1.50rem);
+                              --step-3: clamp(1.50rem, 1.28rem + 1.20vw, 1.95rem);
+                                --step-4: clamp(1.90rem, 1.55rem + 1.80vw, 2.60rem);
+                                }
+
 }
-
 [data-theme="light"] {
   --bg: #f7f8fb;
   --panel: #ffffff;
@@ -132,11 +133,15 @@ svg { vertical-align: middle; }
 .hero-cta { display: flex; gap: .8rem; margin: 1.2rem 0 1.2rem; }
 .btn { display: inline-block; padding: .8rem 1rem; border-radius: .7rem; border: 1px solid var(--line); text-decoration: none; color: var(--text); background: var(--panel); }
 .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border: none; color: white; box-shadow: var(--shadow); }
-.hero-tags { display: flex; gap: .5rem; list-style: none; padding: 0; margin: 0; color: var(--muted); }
-.hero-tags li { border: 1px dashed var(--line); padding: .35rem .6rem; border-radius: .5rem; }
-.hero-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem; box-shadow: var(--shadow); }
-.hero-card-line { height: 12px; margin: .6rem 0; background: color-mix(in oklab, var(--brand), var(--panel) 80%); border-radius: 8px; }
-.hero-card-line.short { width: 70%; background: color-mix(in oklab, var(--brand-2), var(--panel) 80%); }
+
+/* Hero icons (diagonale Anordnung) */
+.hero-copy { position: relative; }
+.hero-icons { position: absolute; right: -78px; top: .25rem; display: grid; gap: .6rem; pointer-events: none; }
+.hero-icon { width: 54px; height: 54px; display: grid; place-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: .9rem; box-shadow: var(--shadow); color: var(--text); }
+.hero-icon i { font-size: 22px; line-height: 1; }
+.hero-icon-gear { transform: translate(0px, 0px) rotate(-6deg); color: var(--brand); }
+.hero-icon-factory { transform: translate(16px, 16px) rotate(2deg); color: color-mix(in oklab, var(--brand-2), var(--text) 30%); }
+.hero-icon-code { transform: translate(32px, 32px) rotate(-3deg); }
 
 /* About */
 .about-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; }
@@ -195,17 +200,7 @@ svg { vertical-align: middle; }
 .timeline .content h3 { margin: 0 0 .3rem; }
 .timeline .content p { margin: 0; color: var(--muted); }
 
-/* Contact */
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-.contact-list { list-style: none; padding: 0; margin: .8rem 0 0; display: grid; gap: .4rem; }
-.contact-list a { color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--line); width: fit-content; }
-.contact-form { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; }
-.form-row { display: grid; gap: .35rem; margin-bottom: .8rem; }
-label { font-size: var(--step-0); color: var(--muted); }
-input, textarea { font: inherit; color: inherit; background: #0000; border: 1px solid var(--line); border-radius: .6rem; padding: .7rem .8rem; }
-input:focus, textarea:focus { outline: 2px solid color-mix(in oklab, var(--brand), transparent 50%); outline-offset: 2px; }
-.form-actions { display: flex; align-items: center; gap: 1rem; }
-.form-note { margin: 0; color: var(--muted); font-size: var(--step-0); }
+/* Contact (entfernt) */
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); background: color-mix(in oklab, var(--bg), transparent 8%); }
@@ -216,11 +211,11 @@ input:focus, textarea:focus { outline: 2px solid color-mix(in oklab, var(--brand
 /* Responsive */
 @media (max-width: 960px) {
   .hero-inner { grid-template-columns: 1fr; }
+  .hero-icons { display: none; }
   .about-grid { grid-template-columns: 1fr; }
   .skills-grid { grid-template-columns: 1fr 1fr; }
   .project-grid { grid-template-columns: 1fr 1fr; }
   .statement-grid { grid-template-columns: 1fr 1fr; }
-  .contact-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 680px) {

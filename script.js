@@ -150,3 +150,11 @@
   }
   function escapeAttr(s) { return escapeHTML(s).replace(/\n/g, ''); }
 })();
+
+// Entferne Kontaktbereich und Links auf #kontakt, um tote Anker zu vermeiden
+(function () {
+  document.querySelectorAll('a[href="#kontakt"]').forEach((a) => a.remove());
+  const sec = document.getElementById('kontakt');
+  if (sec) sec.remove();
+})();
+

@@ -7,6 +7,7 @@
     <title>Portfolio – Vom SPS-Programmierer zum Webentwickler</title>
     <meta name="description" content="One-Page Portfolio: Projekte, Lebenslauf und Kontakt. Vom SPS/PLC-Programmierer zum Web-/Frontend-Entwickler." />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
     <a class="skip-link" href="#start">Zum Inhalt springen</a>
@@ -31,7 +32,6 @@
             <li><a href="#kompetenzen">Kompetenzen</a></li>
             <li><a href="#projekte">Projekte</a></li>
             <li><a href="#lebenslauf">Lebenslauf</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
           </ul>
         </nav>
 
@@ -48,21 +48,21 @@
           <div class="hero-copy">
             <h1>Vom SPS‑Programmierer zum Webentwickler</h1>
             <p class="lead">
-              Ich baue moderne, performante Frontends – mit solidem technischen
-              Verständnis aus der Automatisierung. Fokus auf sauberes UI, gute
-              Developer‑Experience und pragmatische Lösungen.
+              Der Weg ist das Ziel....
+              <i class="fa-solid fa-gears"></i>
             </p>
-            <div class="hero-cta">
-              <a class="btn primary" href="#projekte">Projekte ansehen</a>
-              <a class="btn" href="#kontakt">Kontakt aufnehmen</a>
+            <!-- Diagonale Icon‑Gruppe neben dem Text -->
+            <div class="hero-icons" aria-hidden="true">
+              <span class="hero-icon hero-icon-gear" title="Präzision & Mechanik">
+                <i class="fa-solid fa-gear"></i>
+              </span>
+              <span class="hero-icon hero-icon-factory" title="Industriemaschinen">
+                <i class="fa-solid fa-industry"></i>
+              </span>
+              <span class="hero-icon hero-icon-code" title="Moderne Software">
+                <i class="fa-solid fa-laptop-code"></i>
+              </span>
             </div>
-            <ul class="hero-tags" aria-label="Schwerpunkte">
-              <li>HTML</li>
-              <li>CSS</li>
-              <li>JavaScript</li>
-              <li>React</li>
-              <li>UI/UX</li>
-            </ul>
           </div>
           <div class="hero-media" aria-hidden="true">
             <div class="hero-card">
@@ -75,88 +75,84 @@
         </div>
       </section>
 
-      <!-- Über mich -->
       <section id="ueber-mich" class="section about" aria-label="Über mich">
-        <div class="container">
-          <header class="section-head">
-            <h2>Über mich</h2>
-            <p>Techniknah, strukturiert, lösungsorientiert.</p>
-          </header>
-          <div class="about-grid">
-            <div>
-              <figure class="portrait">
-                <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=640&auto=format&fit=crop" alt="Portrait von mir (Platzhalter)" />
-                <figcaption class="muted">Platzhalter‑Portrait – wird ersetzt.</figcaption>
-              </figure>
-              <p>
-                Ich komme aus der SPS/PLC‑Welt (z. B. Siemens TIA Portal, Beckhoff
-                TwinCAT) und wechsle gezielt in die Web‑/Frontend‑Entwicklung. Was
-                ich mitbringe: klare Systematik, strukturierte Fehlersuche und ein
-                hoher Qualitätsanspruch.
-              </p>
-              <p>
-                Aktuell vertiefe ich moderne Frontend‑Stacks (HTML, CSS, JavaScript,
-                React) und setze Projekte um, die sowohl technisch solide als auch
-                nutzerzentriert sind.
-              </p>
-            </div>
-            <ul class="about-list" aria-label="Highlights">
-              <li>Solide Basis: Semantik, Accessibility, Performance</li>
-              <li>Komponenten‑Denken & saubere Zustände</li>
-              <li>Versionskontrolle (Git) & Teamfähigkeit</li>
-              <li>Industrieverständnis & Schnittstellen (z. B. OPC UA)</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+  <div class="container">
+    <header class="section-head">
+      <h2>Über mich</h2>
+      <p>Zwischen Automatisierung und Software – Technik mit Sinn.</p>
+    </header>
+
+    <div class="about-grid">
+      <div>
+        <figure class="portrait">
+          <img
+            src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=640&auto=format&fit=crop"
+            alt="Portrait von mir (Platzhalter)"
+          />
+          <figcaption class="muted">Platzhalter-Portrait – wird ersetzt.</figcaption>
+        </figure>
+
+        <p>
+          Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit
+          als SPS-Programmierer habe ich erkannt, dass meine Leidenschaft stärker in der
+          Softwareentwicklung liegt. Mich reizt besonders die kreative, interaktive und
+          konzeptionelle Arbeit mit Software.
+        </p>
+
+        <p>
+          Beruflich entwickle ich aktuell SPS-Steuerungen für Industriemaschinen.
+          Privat arbeite ich an verschiedenen Projekten, von Hausautomation mit ioBroker, Arduino und MQTT bis hin zur smarten Camper-Steuerung mit Raspberry Pi.
+        </p>
+
+        <p>
+          Mein aktuelles Projekt: eine Web-App, die Routen für Camper berechnet und
+          Campingplätze, Freizeitaktivitäten und Orte aus Google Maps kombiniert.
+          Dadurch vertiefe ich mein Wissen in modernen Softwarearchitekturen,
+          Frameworks und Datenbanken.
+        </p>
+
+        <div class="hero-cta"><a class="btn primary" href="#projekte">Zu meinen Projekten</a></div>
+      </div>
+
+      <ul class="about-list" aria-label="Highlights">
+        <li>Duales Studium Elektrotechnik – Automation (B. Eng.)</li>
+        <li>Berufserfahrung in SPS-Programmierung & Antriebstechnik</li>
+        <li>Private Software- & IoT-Projekte (Smart Home, Camper, Web-App)</li>
+        <li>Erste Kenntnisse in HTML, CSS, JavaScript, APIs & Datenbanken</li>
+        <li>Analytisch, lernfreudig und technisch vielseitig</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 
       <!-- Statements -->
       <section id="statements" class="section statements" aria-label="Statements">
         <div class="container">
           <header class="section-head">
-            <h2>Zwischen Technik und Natur</h2>
-            <p>Werte, Haltung und Motivation.</p>
+            <h2>Werte & Fokus</h2>
           </header>
           <div class="statement-grid">
             <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Berge und Natur" />
-              <h3>Über mich – Zwischen Technik und Natur</h3>
-              <p>Ich finde Ruhe in der Natur und Energie in neuen Ideen.</p>
+              <img class="statement-img" src="/images/IMG_0171.jpg" alt="Camper in den Bergen – Verbindung von Natur und Freiheit" />
+              <h3>🌿 Zwischen Natur und Technologie</h3>
+              <p>Ich finde Ruhe in der Natur und Inspiration in der Technik.</p>
+              <p>Ehrliche Gespräche bringen mehr als perfekte Phrasen.</p>
+              <p>Ich arbeite gern mit Menschen, die Struktur geben und Ideen zulassen.</p>
             </article>
             <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop" alt="Camper vor Berglandschaft" />
-              <h3>Freiheit leben</h3>
-              <p>Camper, Berge, Wald – mein Kompass zeigt Richtung Freiheit.</p>
+              <img class="statement-img" src="/images/54e4e040-1451-4818-b16a-6babadf9101f.png " alt="Elektronik‑Prototyping – Technik mit Sinn" />
+              <h3>⚙️ Technik mit Sinn</h3>
+              <p>Ich liebe es, Dinge auszuprobieren, zu verstehen und besser zu machen.</p>
+              <p>Technik soll das Leben vereinfachen <br>-> nicht verkomplizieren.</p>
+              <p>Kreativität und Funktion gehören für mich zusammen.</p>
             </article>
             <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop" alt="Elektronik‑Platine in Nahaufnahme" />
-              <h3>Technik mit Sinn</h3>
-              <p>Ich liebe es, Dinge auszuprobieren, zu verstehen und besser zu machen. Technik soll das Leben vereinfachen – nicht verkomplizieren.</p>
-            </article>
-            <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Code auf Bildschirm" />
-              <h3>Software statt Schaltplan</h3>
-              <p>Vom SPS‑Programmierer zum Softwareentwickler – weil Kreativität zählt. Ich denke in Funktionen, aber handle mit Gefühl.</p>
-            </article>
-            <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop" alt="Lernen am Laptop mit Notizen" />
-              <h3>Lernen durch Machen</h3>
-              <p>Ich wachse mit jedem Projekt – Zeile für Zeile, Code für Code. Fehler sind keine Rückschläge, sondern Sprungbretter.</p>
-            </article>
-            <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop" alt="Team im Gespräch" />
-              <h3>Kommunikation zählt</h3>
-              <p>Ehrliche Gespräche bringen mehr als perfekte Phrasen. Ich arbeite gern mit Menschen, die Struktur geben und Ideen zulassen.</p>
-            </article>
-            <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1200&auto=format&fit=crop" alt="IoT‑Bauteile und Prototyping" />
-              <h3>Projekte, die bewegen</h3>
-              <p>Campervan trifft Code – mein mobiles Smart Home auf Rädern. Roadtrip‑App, Smart Home, IoT – meine Spielwiese für kreative Lösungen.</p>
-            </article>
-            <article class="card statement-card">
-              <img class="statement-img" src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=1200&auto=format&fit=crop" alt="Minimaler Arbeitsplatz" />
-              <h3>Ziele</h3>
-              <p>Ich will Software entwickeln, die intuitiv, nützlich und ästhetisch ist. Mein Antrieb: Technik verstehen und sie menschlich machen.</p>
+              <img class="statement-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Code auf Bildschirm – moderne Softwareentwicklung" />
+              <h3>💻 Software statt Schaltplan</h3>
+              <p>Vom SPS‑Programmierer zum Softwareentwickler, weil Kreativität zählt.</p>
+              <p>Ich denke in Funktionen, aber handle mit Gefühl.</p>
+              <p>Ich möchte Software schaffen, die intuitiv ist und echten Mehrwert bietet.</p>
             </article>
           </div>
         </div>
@@ -293,29 +289,51 @@
             <li class="timeline-item">
               <div class="time">2024 – heute</div>
               <div class="content">
-                <h3>Web/Frontend – Portfolio & Projekte</h3>
-                <p>Fokus auf React, moderne CSS‑Patterns und Tooling.</p>
+                <h3>SPS‑Programmierer – Lebbing automation & drives GmbH, Bocholt</h3>
+                <p>Entwicklung von SPS‑Steuerungen (Siemens TIA Portal/S7), Antriebs‑Parametrierung, Visualisierung (WinCC), sowie Inbetriebnahmen im In‑ und Ausland.</p>
               </div>
             </li>
             <li class="timeline-item">
-              <div class="time">2019 – 2024</div>
+              <div class="time">2019 – heute</div>
               <div class="content">
-                <h3>SPS‑Programmierer</h3>
-                <p>Inbetriebnahme, Fehlersuche, Automatisierung, Schnittstellen.</p>
+                <h3>DJ & Veranstaltungstechnik (Nebenerwerb)</h3>
+                <p>Planung und Durchführung von Events (privat/geschäftlich); Technik‑Setup und Musik für Geburtstage, Hochzeiten, Schul‑ und Firmenevents.</p>
               </div>
             </li>
             <li class="timeline-item">
-              <div class="time">2016 – 2019</div>
+              <div class="time">2020 – 2024</div>
               <div class="content">
-                <h3>Ausbildung/Studium (Technik)</h3>
-                <p>Grundlagen Elektrotechnik, Software, Projektarbeit.</p>
+                <h3>Bachelor of Engineering – Elektrotechnik Automation (dual)</h3>
+                <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung, Schnittstellen.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="time">2024</div>
+              <div class="content">
+                <h3>Bachelorarbeit</h3>
+                <p><em>Konzeptionierung einer Methode zur Erhöhung der Seitenregistergenauigkeit in Tiefdruckmaschinen für Dekorpapier</em> – Entwicklung einer Regelungsmethode zur automatisierten Anpassung von Trocknungsparametern; Umsetzung mit Lebbing und Praxistest beim Kunden.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="time">2017 – 2020</div>
+              <div class="content">
+                <h3>Allgemeine Hochschulreife</h3>
+                <p>Berufskolleg, Borken.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="time">2011 – 2017</div>
+              <div class="content">
+                <h3>Fachoberschulreife</h3>
+                <p>Nünning‑Realschule, Borken‑Gemen.</p>
               </div>
             </li>
           </ol>
         </div>
       </section>
 
-      <!-- Kontakt / Call to Action -->
+      <!-- Kontakt / Call to Action (entfernt) -->
+      <!--
       <section id="kontakt" class="section contact" aria-label="Kontakt">
         <div class="container">
           <header class="section-head">
@@ -356,6 +374,7 @@
           </div>
         </div>
       </section>
+      -->
     </main>
 
     <footer class="site-footer">
