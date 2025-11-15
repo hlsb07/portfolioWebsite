@@ -212,7 +212,7 @@ svg { vertical-align: middle; }
 
 /* Hero icons - hidden state for domino animation */
 .hero-icon.hidden {
-  opacity: 0;
+  opacity: 1;
   transform: none;
 }
 

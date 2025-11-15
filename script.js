@@ -229,12 +229,12 @@
       store(
         factory.animate(
           [
-            { transform: 'translateX(-220px) rotate(2deg)', opacity: 0 },
+            { transform: 'translateX(-220px) rotate(2deg)', opacity: 1 },
             { transform: 'translateX(-80px) rotate(2deg)', opacity: 1, offset: 0.5 },
             { transform: 'translateX(-15px) rotate(10deg)', offset: 0.75 },
             { transform: 'translateX(0px) rotate(2deg)' }
           ],
-          { duration: 1600, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' }
+          { duration: 2600, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' }
         )
       );
     }
@@ -250,8 +250,8 @@
             { transform: 'translateX(0px) rotate(620deg)' }
           ],
           {
-            duration: 1500,
-            delay: 350,
+            duration: 2500,
+            delay: 550,
             easing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
             fill: 'forwards'
           }
@@ -270,8 +270,8 @@
             { transform: 'translateX(0px) rotate(-3deg)' }
           ],
           {
-            duration: 1400,
-            delay: 900,
+            duration: 2400,
+            delay: 2000,
             easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
             fill: 'forwards'
           }
