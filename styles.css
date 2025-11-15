@@ -137,12 +137,84 @@ svg { vertical-align: middle; }
 
 /* Hero icons (diagonale Anordnung) */
 .hero-copy { display: flex; flex-direction: row; justify-content: space-around; align-items: center; gap: 2rem; }
-.hero-icons {display: grid; gap: 2rem; pointer-events: none; width: 40vb;}
+.hero-icons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr));
+  grid-auto-rows: auto;
+  gap: 1.2rem 1.5rem;
+  pointer-events: none;
+  width: min(100%, 460px);
+  justify-items: center;
+}
 .hero-icon { display: grid; place-items: center; border-radius: .9rem; background: none; color: var(--text); }
 .hero-icon i { font-size: 80px; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
-.hero-icon-gear { transform: translate(0px, 0px) rotate(-6deg); color: var(--brand); }
-.hero-icon-factory { transform: translate(64px, 16px) rotate(2deg); color: color-mix(in oklab, var(--brand-2), var(--brand-2-mix) 10%); }
-.hero-icon-code { transform: translate(128px, 32px) rotate(-3deg); }
+.hero-icon-gear { transform: rotate(-6deg); color: var(--brand); }
+.hero-icon-factory { transform: rotate(2deg); color: color-mix(in oklab, var(--brand-2), var(--brand-2-mix) 10%); }
+.hero-icon-code { transform: rotate(-3deg); }
+
+.hero-path {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .8rem;
+  font-size: var(--step-0);
+  color: var(--muted);
+  width: 100%;
+}
+.hero-step {
+  padding: .25rem .65rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--panel), transparent 20%);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+.hero-step--plc { color: var(--brand-2); border-color: color-mix(in oklab, var(--brand-2), var(--line) 40%); }
+.hero-step--software { color: var(--brand); border-color: color-mix(in oklab, var(--brand), var(--line) 40%); }
+.hero-path-track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--line), transparent 35%);
+  overflow: hidden;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .8rem;
+}
+.hero-path-progress {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--brand-2), var(--brand));
+  border-radius: inherit;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.hero-path-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0;
+  z-index: 1;
+}
+.hero-path-track .hero-path-dot:nth-of-type(1) { color: var(--brand-2); }
+.hero-path-track .hero-path-dot:nth-of-type(2) { color: color-mix(in oklab, var(--brand-2), var(--brand) 50%); }
+.hero-path-track .hero-path-dot:nth-of-type(3) { color: var(--brand); }
+.hero-animation-caption {
+  max-width: 36ch;
+  color: var(--muted);
+  margin: .5rem 0 0;
+}
+
+/* Hero icons - hidden state for domino animation */
+.hero-icon.hidden {
+  opacity: 0;
+  transform: none;
+}
 
 /* About */
 .about-grid { display: flex; gap: 2rem; align-items: center; }
@@ -332,6 +404,8 @@ svg { vertical-align: middle; }
   100% { background-position: -200% 0; }
 }
 
+/* Domino/Kick Effect Keyframes */
+
 /* Timeline */
 .timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; position: relative; }
 .timeline:before { content: ""; position: absolute; left: 10px; top: .2rem; bottom: .2rem; width: 2px; background: var(--line); }
@@ -358,7 +432,7 @@ svg { vertical-align: middle; }
 
 @media (max-width: 960px) {
   .hero-copy { display: flex; flex-direction: column; justify-content: space-around; align-items: center; gap: 2rem; }
-  .hero-icons {display: grid; gap: 2rem; pointer-events: none; width: 40vb;}
+  .hero-icons { width: 100%; grid-template-columns: repeat(3, minmax(60px, 1fr)); }
   .about-grid { display: flex; flex-direction: column; gap: 2rem; align-items: center; }
   .statement-grid { display: flex; flex-direction: column; gap: 1rem; }
 }
@@ -393,6 +467,10 @@ svg { vertical-align: middle; }
     /* filter: blur(3px); */
   }
 
+  .hero-icon.hidden.slide-up {
+    transform: none;
+  }
+
   .hidden.slide-down {
     transform: translateY(-50px);
   }
@@ -401,11 +479,6 @@ svg { vertical-align: middle; }
     transform: none;
     filter: none;
   }
-
-  /* Stagger delays for hero icons */
-  .hero-icon:nth-child(1) { transition-delay: 0ms; }
-  .hero-icon:nth-child(2) { transition-delay: 100ms; }
-  .hero-icon:nth-child(3) { transition-delay: 200ms; }
 
   /* Stagger delays for statement cards */
   .statement-card:nth-child(1) { transition-delay: 0ms; }
@@ -434,6 +507,15 @@ svg { vertical-align: middle; }
   }
 
   .show {
+    opacity: 1;
+  }
+
+  /* Simplified hero icons for reduced motion */
+  .hero-path .hero-path-progress {
+    transform: scaleX(1);
+  }
+
+  .hero-path .hero-path-dot {
     opacity: 1;
   }
 }

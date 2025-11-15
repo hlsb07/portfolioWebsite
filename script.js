@@ -179,3 +179,163 @@
   hiddenElements.forEach((el) => observer.observe(el));
 })();
 
+// Hero animation timeline via Web Animations API
+(function () {
+  const heroIcons = document.querySelector('.hero-icons');
+  if (!heroIcons) return;
+
+  const factory = heroIcons.querySelector('.hero-icon-factory');
+  const gear = heroIcons.querySelector('.hero-icon-gear');
+  const code = heroIcons.querySelector('.hero-icon-code');
+  const progress = heroIcons.querySelector('.hero-path-progress');
+  const dots = heroIcons.querySelectorAll('.hero-path-dot');
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const setStaticState = () => {
+    [factory, gear, code].forEach((icon) => {
+      if (!icon) return;
+      icon.style.opacity = '1';
+      icon.style.removeProperty('animation');
+      icon.style.removeProperty('transform');
+    });
+    if (progress) {
+      progress.style.transform = 'scaleX(1)';
+    }
+    dots.forEach((dot) => {
+      dot.style.opacity = '1';
+      dot.style.transform = 'scale(1)';
+    });
+  };
+
+  if (prefersReducedMotion.matches) {
+    setStaticState();
+    return;
+  }
+
+  let running = false;
+
+  const playHeroAnimation = () => {
+    if (running) return;
+    running = true;
+
+    const promises = [];
+    const store = (animation) => {
+      if (!animation) return;
+      promises.push(animation.finished.catch(() => {}));
+    };
+
+    if (factory) {
+      store(
+        factory.animate(
+          [
+            { transform: 'translateX(-220px) rotate(2deg)', opacity: 0 },
+            { transform: 'translateX(-80px) rotate(2deg)', opacity: 1, offset: 0.5 },
+            { transform: 'translateX(-15px) rotate(10deg)', offset: 0.75 },
+            { transform: 'translateX(0px) rotate(2deg)' }
+          ],
+          { duration: 1600, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' }
+        )
+      );
+    }
+
+    if (gear) {
+      store(
+        gear.animate(
+          [
+            { transform: 'translateX(-50px) rotate(-6deg)', opacity: 0 },
+            { transform: 'translateX(-20px) rotate(160deg)', opacity: 1, offset: 0.3 },
+            { transform: 'translateX(-5px) rotate(320deg)', offset: 0.55 },
+            { transform: 'translateX(8px) rotate(520deg)', offset: 0.8 },
+            { transform: 'translateX(0px) rotate(620deg)' }
+          ],
+          {
+            duration: 1500,
+            delay: 350,
+            easing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+            fill: 'forwards'
+          }
+        )
+      );
+    }
+
+    if (code) {
+      store(
+        code.animate(
+          [
+            { transform: 'translateX(-120px) rotate(-3deg)', opacity: 0 },
+            { transform: 'translateX(-70px) rotate(45deg)', opacity: 1, offset: 0.35 },
+            { transform: 'translateX(-10px) rotate(-12deg)', offset: 0.65 },
+            { transform: 'translateX(10px) rotate(6deg)', offset: 0.85 },
+            { transform: 'translateX(0px) rotate(-3deg)' }
+          ],
+          {
+            duration: 1400,
+            delay: 900,
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            fill: 'forwards'
+          }
+        )
+      );
+    }
+
+    if (progress) {
+      store(
+        progress.animate(
+          [
+            { transform: 'scaleX(0)' },
+            { transform: 'scaleX(1)' }
+          ],
+          { duration: 1400, delay: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+        )
+      );
+    }
+
+    dots.forEach((dot, index) => {
+      store(
+        dot.animate(
+          [
+            { opacity: 0, transform: 'scale(0.5)' },
+            { opacity: 1, transform: 'scale(1.2)', offset: 0.7 },
+            { opacity: 1, transform: 'scale(1)' }
+          ],
+          {
+            duration: 500,
+            delay: 900 + index * 200,
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            fill: 'forwards'
+          }
+        )
+      );
+    });
+
+    if (promises.length === 0) {
+      running = false;
+      return;
+    }
+
+    Promise.all(promises).finally(() => {
+      running = false;
+    });
+  };
+
+  const heroObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          playHeroAnimation();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  heroObserver.observe(heroIcons);
+
+  prefersReducedMotion.addEventListener?.('change', (event) => {
+    if (event.matches) {
+      heroObserver.disconnect();
+      setStaticState();
+    }
+  });
+})();
