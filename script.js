@@ -225,53 +225,35 @@
       promises.push(animation.finished.catch(() => {}));
     };
 
+    // Step 1: Factory icon appears (simple fade + slide up)
     if (factory) {
       store(
         factory.animate(
           [
-            { transform: 'translateX(-220px) rotate(2deg)', opacity: 1 },
-            { transform: 'translateX(-80px) rotate(2deg)', opacity: 1, offset: 0.5 },
-            { transform: 'translateX(-15px) rotate(10deg)', offset: 0.75 },
-            { transform: 'translateX(0px) rotate(2deg)' }
+            { opacity: 1, transform: 'translatex(0px) scale(1) rotate(0deg)' },
+            { opacity: 1, transform: 'translateX(30px) scale(1.1) rotate(10deg)' },
+            { opacity: 1, transform: 'translateX(0px) scale(1) rotate(0deg)' }
           ],
-          { duration: 2600, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' }
+          { duration: 2000, 
+            delay: 500,
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', 
+            fill: 'forwards' }
         )
       );
     }
 
+    // Step 2: Gear icon appears (simple fade + slide up)
     if (gear) {
       store(
         gear.animate(
           [
-            { transform: 'translateX(-50px) rotate(-6deg)', opacity: 0 },
-            { transform: 'translateX(-20px) rotate(160deg)', opacity: 1, offset: 0.3 },
-            { transform: 'translateX(-5px) rotate(320deg)', offset: 0.55 },
-            { transform: 'translateX(8px) rotate(520deg)', offset: 0.8 },
-            { transform: 'translateX(0px) rotate(620deg)' }
+            { opacity: 1, transform: 'translatex(0px) scale(1) rotate(0deg)' },            
+            { opacity: 1, transform: 'translateX(20px) scale(1.1) rotate(40deg)' },     
+            { opacity: 1, transform: 'translateX(0px) scale(1) rotate(6deg)' }
           ],
           {
-            duration: 2500,
-            delay: 550,
-            easing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-            fill: 'forwards'
-          }
-        )
-      );
-    }
-
-    if (code) {
-      store(
-        code.animate(
-          [
-            { transform: 'translateX(-120px) rotate(-3deg)', opacity: 0 },
-            { transform: 'translateX(-70px) rotate(45deg)', opacity: 1, offset: 0.35 },
-            { transform: 'translateX(-10px) rotate(-12deg)', offset: 0.65 },
-            { transform: 'translateX(10px) rotate(6deg)', offset: 0.85 },
-            { transform: 'translateX(0px) rotate(-3deg)' }
-          ],
-          {
-            duration: 2400,
-            delay: 2000,
+            duration: 6000,
+            delay: 700,
             easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
             fill: 'forwards'
           }
@@ -279,6 +261,26 @@
       );
     }
 
+    // Step 3: Code icon appears (simple fade + slide up)
+    if (code) {
+      store(
+        code.animate(
+          [
+            { opacity: 1, transform: 'translatex(0px) scale(1) rotate(0deg)' },            
+            { opacity: 1, transform: 'translateX(40px) scale(1.3) rotate(20deg)' },
+            { opacity: 1, transform: 'translateX(0px) scale(1) rotate(0deg)' }
+          ],
+          {
+            duration: 5000,
+            delay: 1000,
+            easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            fill: 'forwards'
+          }
+        )
+      );
+    }
+
+    // Progress bar animation
     if (progress) {
       store(
         progress.animate(
@@ -286,11 +288,12 @@
             { transform: 'scaleX(0)' },
             { transform: 'scaleX(1)' }
           ],
-          { duration: 1400, delay: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+          { duration: 2200, delay: 400, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
         )
       );
     }
 
+    // Dots animation (sequential appearance)
     dots.forEach((dot, index) => {
       store(
         dot.animate(
@@ -300,8 +303,8 @@
             { opacity: 1, transform: 'scale(1)' }
           ],
           {
-            duration: 500,
-            delay: 900 + index * 200,
+            duration: 400,
+            delay: 300 + index * 300,
             easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
             fill: 'forwards'
           }
