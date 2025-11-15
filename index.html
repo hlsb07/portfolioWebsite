@@ -54,13 +54,13 @@
             </div>
             <!-- Diagonale Icon‑Gruppe neben dem Text -->
             <div class="hero-icons" aria-hidden="true">
-              <span class="hero-icon hero-icon-gear" title="Präzision & Mechanik">
-                <i class="fa-solid fa-gear"></i>
-              </span>
-              <span class="hero-icon hero-icon-factory" title="Industriemaschinen">
+              <span class="hero-icon hero-icon-factory hidden slide-up" title="Industriemaschinen">
                 <i class="fa-solid fa-industry"></i>
               </span>
-              <span class="hero-icon hero-icon-code" title="Moderne Software">
+              <span class="hero-icon hero-icon-gear hidden slide-up" title="Workflow & Mechanik">
+                <i class="fa-solid fa-gear"></i>
+              </span>
+              <span class="hero-icon hero-icon-code hidden slide-up" title="Moderne Software">
                 <i class="fa-solid fa-laptop-code"></i>
               </span>
             </div>
@@ -70,13 +70,13 @@
 
       <section id="ueber-mich" class="section about" aria-label="Über mich">
   <div class="container">
-    <header class="section-head">
+    <header class="section-head hidden slide-up">
       <h2>Über mich</h2>
       <p>Jan Hülsbrink</p>
     </header>
-    
+
     <div class="about-grid">
-      <div class="about-img">
+      <div class="about-img hidden">
         <figure class="portrait">
           <img
           src="images/IMG_0435.jpg"
@@ -86,7 +86,7 @@
           <div class="hero-cta"><a class="btn primary" href="#projekte">Zu meinen Projekten</a></div>
           </figure>
         </div>
-        <div class="about-content">
+        <div class="about-content hidden slide-right">
           <p>
             Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit
             als SPS-Programmierer habe ich erkannt, dass meine Leidenschaft stärker in der
@@ -124,28 +124,28 @@
       <!-- Statements -->
       <section id="statements" class="section statements" aria-label="Statements">
         <div class="container">
-          <header class="section-head">
+          <header class="section-head hidden slide-up">
             <h2>Werte & Fokus</h2>
           </header>
           <div class="statement-grid">
-            <article class="card statement-card">
+            <article class="card statement-card hidden slide-up">
               <img class="statement-img" src="/images/IMG_0171.jpg" alt="Camper in den Bergen – Verbindung von Natur und Freiheit" />
               <h3>🌿 Zwischen Natur und Technologie</h3>
               <p>Ich finde Ruhe in der Natur und Inspiration in der Technik.</p>
               <p>Ehrliche Gespräche bringen mehr als perfekte Phrasen.</p>
               <p>Ich arbeite gern mit Menschen, die Struktur geben und Ideen zulassen.</p>
             </article>
-            <article class="card statement-card">
+            <article class="card statement-card hidden slide-up">
               <img class="statement-img" src="/images/54e4e040-1451-4818-b16a-6babadf9101f.png " alt="Elektronik‑Prototyping – Technik mit Sinn" />
               <h3>⚙️ Technik mit Sinn</h3>
-              <p>Ich liebe es, Dinge auszuprobieren, zu verstehen und besser zu machen.</p>
+              <p>Ich liebe es, Dinge auszuprobieren, zu verstehen und zu optimieren.</p>
               <p>Technik soll das Leben vereinfachen <br>-> nicht verkomplizieren.</p>
               <p>Kreativität und Funktion gehören für mich zusammen.</p>
             </article>
-            <article class="card statement-card">
+            <article class="card statement-card hidden slide-up">
               <img class="statement-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Code auf Bildschirm – moderne Softwareentwicklung" />
               <h3>💻 Software statt Schaltplan</h3>
-              <p>Vom SPS‑Programmierer zum Softwareentwickler, weil Kreativität zählt.</p>
+              <p>Vom SPS‑Programmierer zum Softwareentwickler, weil Kreativität überwiegt.</p>
               <p>Ich denke in Funktionen, aber handle mit Gefühl.</p>
               <p>Ich möchte Software schaffen, die intuitiv ist und echten Mehrwert bietet.</p>
             </article>
@@ -156,13 +156,13 @@
       <!-- Projekte -->
       <section id="projekte" class="section projects" aria-label="Projekte">
         <div class="container">
-          <header class="section-head">
+          <header class="section-head hidden slide-up">
             <h2>Ausgewählte Projekte</h2>
             <p>Der Weg, der mich in die Softwareentwicklung führte.</p>
           </header>
 
           <div class="feature-projects">
-            <article class="feature project--home">
+            <article class="feature project--home hidden">
               <div class="feature-block">
                 <div class="feature-content">
                   <header>
@@ -185,9 +185,9 @@
                 
               </div>
             </article>
-            <article class="feature project--camper">
+            <article class="feature project--camper hidden slide-right">
               <div class="feature-block">
-                
+
                 <div class="feature-imagesection">
                   <img src="images/Smarthome2.png" alt="">
 
@@ -209,7 +209,7 @@
                 </div>
               </div>
             </article>
-            <article class="feature project--route">
+            <article class="feature project--route hidden">
                 <div class="feature-block">
                   <div class="feature-content">
                     <header>
@@ -235,9 +235,9 @@
               </article>
           </div>
 
-          <h3 class="section-sub">Aktuell auf GitHub</h3>
-          <p class="muted">Mein neuestes Projekt – automatisch geladen.</p>
-          <div id="gh-repos" class="github-showcase" data-github-user="arduino" data-max="1">
+          <h3 class="section-sub hidden slide-up">Aktuell auf GitHub</h3>
+          <p class="muted hidden slide-up">Mein neuestes Projekt – automatisch geladen.</p>
+          <div id="gh-repos" class="github-showcase hidden fade-only" data-github-user="arduino" data-max="1">
             <article class="github-featured-card skeleton">
               <div class="repo-head"></div>
               <div class="repo-desc"></div>
@@ -250,48 +250,48 @@
       <!-- Lebenslauf -->
       <section id="lebenslauf" class="section resume" aria-label="Lebenslauf">
         <div class="container">
-          <header class="section-head">
+          <header class="section-head hidden slide-up">
             <h2>Lebenslauf</h2>
             <p>Stationen & Ausbildung in Kurzform.</p>
           </header>
 
           <ol class="timeline" aria-label="Stationen">
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2024 – heute</div>
               <div class="content">
                 <h3>SPS‑Programmierer – Lebbing automation & drives GmbH, Bocholt</h3>
                 <p>Entwicklung von SPS‑Steuerungen (Siemens TIA Portal/S7), Antriebs‑Parametrierung, Visualisierung (WinCC), sowie Inbetriebnahmen im In‑ und Ausland.</p>
               </div>
             </li>
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2019 – heute</div>
               <div class="content">
                 <h3>DJ & Veranstaltungstechnik (Nebenerwerb)</h3>
                 <p>Planung und Durchführung von Events (privat/geschäftlich); Technik‑Setup und Musik für Geburtstage, Hochzeiten, Schul‑ und Firmenevents.</p>
               </div>
             </li>
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2024</div>
               <div class="content">
                 <h3>Bachelorarbeit</h3>
                 <p><em>Konzeptionierung einer Methode zur Erhöhung der Seitenregistergenauigkeit in Tiefdruckmaschinen für Dekorpapier</em> – Entwicklung einer Regelungsmethode zur automatisierten Anpassung von Trocknungsparametern; Umsetzung mit Lebbing und Praxistest beim Kunden.</p>
               </div>
             </li>
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2020 – 2024</div>
               <div class="content">
                 <h3>Bachelor of Engineering – Elektrotechnik Automation (dual)</h3>
                 <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung, Schnittstellen.</p>
               </div>
             </li>
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2017 – 2020</div>
               <div class="content">
-                <h3>Allgemeine Hochschulreife</h3>
+                <h3>Allgemeine Hochschulreife Ingenierwissenschaften</h3>
                 <p>Berufskolleg, Borken.</p>
               </div>
             </li>
-            <li class="timeline-item">
+            <li class="timeline-item hidden">
               <div class="time">2011 – 2017</div>
               <div class="content">
                 <h3>Fachoberschulreife</h3>

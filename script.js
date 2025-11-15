@@ -158,3 +158,24 @@
   if (sec) sec.remove();
 })();
 
+// Scroll Animations mit Intersection Observer
+(function () {
+  const hiddenElements = document.querySelectorAll('.hidden');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      } else {
+        // Remove 'show' class to allow animations to repeat when scrolling back
+        entry.target.classList.remove('show');
+      }
+    });
+  }, {
+    threshold: 0.1, // Trigger when 10% of element is visible
+    rootMargin: '0px 0px -50px 0px' // Start animation slightly before element enters viewport
+  });
+
+  hiddenElements.forEach((el) => observer.observe(el));
+})();
+

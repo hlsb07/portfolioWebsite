@@ -361,5 +361,93 @@ svg { vertical-align: middle; }
   .hero-icons {display: grid; gap: 2rem; pointer-events: none; width: 40vb;}
   .about-grid { display: flex; flex-direction: column; gap: 2rem; align-items: center; }
   .statement-grid { display: flex; flex-direction: column; gap: 1rem; }
+}
 
+/* ========================================
+   Scroll Animations
+   ======================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hidden state - initial state before animation */
+  .hidden {
+    opacity: 0;
+    /* filter: blur(5px); */
+    transform: translateX(-100px);
+    transition: all 0.6s ease-out;
+  }
+
+  /* Show state - animate in */
+  .show {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+
+  /* Variations for different animation directions */
+  .hidden.slide-right {
+    transform: translateX(100px);
+  }
+
+  .hidden.slide-up {
+    transform: translateY(50px);
+    /* filter: blur(3px); */
+  }
+
+  .hidden.slide-down {
+    transform: translateY(-50px);
+  }
+
+  .hidden.fade-only {
+    transform: none;
+    filter: none;
+  }
+
+  /* Stagger delays for hero icons */
+  .hero-icon:nth-child(1) { transition-delay: 0ms; }
+  .hero-icon:nth-child(2) { transition-delay: 100ms; }
+  .hero-icon:nth-child(3) { transition-delay: 200ms; }
+
+  /* Stagger delays for statement cards */
+  .statement-card:nth-child(1) { transition-delay: 0ms; }
+  .statement-card:nth-child(2) { transition-delay: 150ms; }
+  .statement-card:nth-child(3) { transition-delay: 300ms; }
+
+  /* Stagger delays for feature projects */
+  .feature:nth-child(1) { transition-delay: 0ms; }
+  .feature:nth-child(2) { transition-delay: 200ms; }
+  .feature:nth-child(3) { transition-delay: 400ms; }
+
+  /* Stagger delays for timeline items */
+  .timeline-item:nth-child(1) { transition-delay: 0ms; }
+  .timeline-item:nth-child(2) { transition-delay: 100ms; }
+  .timeline-item:nth-child(3) { transition-delay: 200ms; }
+  .timeline-item:nth-child(4) { transition-delay: 300ms; }
+  .timeline-item:nth-child(5) { transition-delay: 400ms; }
+  .timeline-item:nth-child(6) { transition-delay: 500ms; }
+}
+
+/* Fallback for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hidden {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .show {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   Smooth Scroll Snap
+   ======================================== */
+
+html {
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+.section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
