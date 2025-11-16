@@ -214,9 +214,16 @@
   }
 
   let running = false;
+  let lastAnimationTime = 0;
+  const cooldownMs = 500; //cooldown after animation finishes
 
   const playHeroAnimation = () => {
     if (running) return;
+
+    // Check cooldown
+    const now = Date.now();
+    if (now - lastAnimationTime < cooldownMs) return;
+
     running = true;
 
     const promises = [];
@@ -314,11 +321,13 @@
 
     if (promises.length === 0) {
       running = false;
+      lastAnimationTime = Date.now();
       return;
     }
 
     Promise.all(promises).finally(() => {
       running = false;
+      lastAnimationTime = Date.now();
     });
   };
 
@@ -334,6 +343,13 @@
   );
 
   heroObserver.observe(heroIcons);
+
+  // Restart animation on hover (only if not already running and after cooldown)
+  heroIcons.addEventListener('mouseenter', () => {
+    if (!prefersReducedMotion.matches) {
+      playHeroAnimation(); // Will only run if not already running and cooldown passed
+    }
+  });
 
   prefersReducedMotion.addEventListener?.('change', (event) => {
     if (event.matches) {
