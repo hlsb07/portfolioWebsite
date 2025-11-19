@@ -358,3 +358,81 @@
     }
   });
 })();
+
+// Horizontal Slide Animation for Projects on Vertical Scroll
+(function () {
+  const projectsSection = document.querySelector('.feature-projects');
+  const projectsContainer = document.querySelector('.feature-projects-container');
+  const projects = document.querySelectorAll('.feature');
+
+  if (!projectsSection || !projectsContainer || projects.length === 0) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (prefersReducedMotion.matches) {
+    // For reduced motion, just show the first project
+    projects.forEach((project, index) => {
+      if (index === 0) {
+        project.classList.add('project-active');
+      } else {
+        project.classList.add('project-next');
+      }
+    });
+    return;
+  }
+
+  let ticking = false;
+
+  function updateProjects() {
+    // Get the bounding rect of the projects section
+    const sectionRect = projectsSection.getBoundingClientRect();
+    const sectionTop = sectionRect.top;
+    const sectionHeight = sectionRect.height;
+
+    // Calculate scroll progress within the section (0 to 1)
+    // The section starts being "active" when it's at the top of the viewport
+    const viewportHeight = window.innerHeight;
+    const scrollProgress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
+
+    // Determine which project should be active based on scroll progress
+    const projectCount = projects.length;
+    const projectIndex = Math.floor(scrollProgress * projectCount);
+    const activeIndex = Math.min(projectIndex, projectCount - 1);
+
+    // Update classes for each project
+    projects.forEach((project, index) => {
+      project.classList.remove('project-prev', 'project-active', 'project-next');
+
+      if (index < activeIndex) {
+        project.classList.add('project-prev');
+      } else if (index === activeIndex) {
+        project.classList.add('project-active');
+      } else {
+        project.classList.add('project-next');
+      }
+    });
+
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateProjects);
+      ticking = true;
+    }
+  }
+
+  // Initialize - set first project as active
+  updateProjects();
+
+  // Listen to scroll events
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateProjects);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
