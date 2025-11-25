@@ -383,21 +383,32 @@
 
   let ticking = false;
 
-  function updateProjects() {
-    // Get the bounding rect of the projects section
+  function getCurrentProject() {
+    // Detection point at 30% from top (same as sections)
+    const viewportPoint = window.scrollY + window.innerHeight * 0.1;
     const sectionRect = projectsSection.getBoundingClientRect();
-    const sectionTop = sectionRect.top;
+    const sectionTop = window.scrollY + sectionRect.top;
     const sectionHeight = sectionRect.height;
 
-    // Calculate scroll progress within the section (0 to 1)
-    // The section starts being "active" when it's at the top of the viewport
-    const viewportHeight = window.innerHeight;
-    const scrollProgress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
+    let closestIndex = 0;
+    let closestDistance = Infinity;
 
-    // Determine which project should be active based on scroll progress
-    const projectCount = projects.length;
-    const projectIndex = Math.floor(scrollProgress * projectCount);
-    const activeIndex = Math.min(projectIndex, projectCount - 1);
+    projects.forEach((_, index) => {
+      // Calculate position of each project within the section
+      const projectPosition = sectionTop + (sectionHeight / projects.length * index) + (sectionHeight / projects.length / 2);
+      const distance = Math.abs(viewportPoint - projectPosition);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    return closestIndex;
+  }
+
+  function updateProjects() {
+    const activeIndex = getCurrentProject();
 
     // Update classes for each project
     projects.forEach((project, index) => {
@@ -432,6 +443,90 @@
   window.addEventListener('resize', () => {
     if (!ticking) {
       window.requestAnimationFrame(updateProjects);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+// Full-Page Scroll Animations - Delta-Based Snapping
+(function () {
+  const sections = document.querySelectorAll('.section.hero, .section.about, .section.statements, .section.resume');
+
+  if (sections.length === 0) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (prefersReducedMotion.matches) {
+    sections.forEach(section => section.classList.add('section-active'));
+    return;
+  }
+
+  let currentSectionIndex = 0;
+  let ticking = false;
+
+  function updateSectionClasses() {
+    sections.forEach((section, index) => {
+      section.classList.remove('section-entering', 'section-active', 'section-exiting');
+
+      if (index < currentSectionIndex) {
+        section.classList.add('section-entering');  // Scrolled past
+      } else if (index === currentSectionIndex) {
+        section.classList.add('section-active');    // Current
+      } else {
+        section.classList.add('section-exiting');   // Not yet reached
+      }
+    });
+  }
+
+  function getCurrentSection() {
+    // Detection point at 30% from top (more sensitive than center at 50%)
+    const viewportPoint = window.scrollY + window.innerHeight * 0.1;
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    sections.forEach((section, index) => {
+      const rect = section.getBoundingClientRect();
+      const sectionMiddle = window.scrollY + rect.top + rect.height / 2;
+      const distance = Math.abs(viewportPoint - sectionMiddle);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    return closestIndex;
+  }
+
+  function updateCurrentSection() {
+    const newIndex = getCurrentSection();
+
+    if (newIndex !== currentSectionIndex) {
+      currentSectionIndex = newIndex;
+      updateSectionClasses();
+    }
+
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateCurrentSection);
+      ticking = true;
+    }
+  }
+
+  // Initialize
+  updateSectionClasses();
+
+  // Listen to scroll events
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateCurrentSection);
       ticking = true;
     }
   }, { passive: true });

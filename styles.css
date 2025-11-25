@@ -524,8 +524,8 @@ svg { vertical-align: middle; }
   }
 
   .hidden.slide-up {
-    transform: translateY(50px);
-    /* filter: blur(3px); */
+    /* transform: translateY(50px);
+    filter: blur(3px); */
   }
 
   .hero-icon.hidden.slide-up {
@@ -586,11 +586,142 @@ svg { vertical-align: middle; }
    ======================================== */
 
 html {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 }
 
 .section {
   scroll-snap-align: start;
-  scroll-snap-stop: normal;
+  scroll-snap-stop: always;
+  will-change: transform, opacity;
+}
+
+/* ========================================
+   Full-Page Scroll Experience (Like Projects)
+   ======================================== */
+
+/* Extended heights for scroll space */
+.section.hero {
+  height: 100vh;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.section.about {
+  height: 100vh;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.section.statements {
+  height: 100vh;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.section.resume {
+  height: auto;
+  min-height: 100vh;
+  padding: 0;
+}
+.section.resume .header{
+  margin-top: 80px;
+}
+
+/* Sticky containers for sections with content that fits in viewport */
+.section.hero .container,
+.section.about > .container,
+.section.statements > .container {
+  position: sticky;
+  top: 80px;
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+/* Resume section: normal flow for scrollable content */
+.section.resume > .container {
+  position: relative;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 2rem 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 3 Simple Classes: entering → active → exiting (like projects) */
+
+  /* Default state: entering (hidden) */
+  .section.hero .hero-inner,
+  .section.hero .hero-text,
+  .section.hero .hero-action,
+  .section.about .about-img,
+  .section.about .about-content {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.4s ease-out, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+  }
+
+  .section.about .about-img {
+    transform: translateX(-80px);
+  }
+
+  .section.about .about-content {
+    transform: translateX(80px);
+  }
+
+  /* Active state: fully visible */
+  .section.section-active .hero-inner,
+  .section.section-active .hero-text,
+  .section.section-active .hero-action,
+  .section.section-active .about-img,
+  .section.section-active .about-content {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* Exiting state: stays visible */
+  .section.section-exiting .hero-inner,
+  .section.section-exiting .hero-text,
+  .section.section-exiting .hero-action,
+  .section.section-exiting .about-img,
+  .section.section-exiting .about-content {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+/* Fallback for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .section.hero,
+  .section.about,
+  .section.statements,
+  .section.resume {
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+
+  .section.hero .container,
+  .section.about > .container,
+  .section.statements > .container,
+  .section.resume > .container {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+  }
+
+  .section.hero .hero-inner,
+  .section.hero .hero-text,
+  .section.hero .hero-action,
+  .section.about .about-img,
+  .section.about .about-content,
+  .section.statements .statement-card,
+  .section.resume .timeline-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
