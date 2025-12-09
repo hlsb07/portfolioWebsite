@@ -368,15 +368,13 @@
   if (!projectsSection || !projectsContainer || projects.length === 0) return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileLayout = window.matchMedia('(max-width: 768px)');
 
-  if (prefersReducedMotion.matches) {
-    // For reduced motion, just show the first project
+  if (prefersReducedMotion.matches || mobileLayout.matches) {
+    // For reduced motion or small screens, just stack the projects
     projects.forEach((project, index) => {
-      if (index === 0) {
-        project.classList.add('project-active');
-      } else {
-        project.classList.add('project-next');
-      }
+      project.classList.remove('project-prev', 'project-active', 'project-next');
+      project.classList.add(index === 0 ? 'project-active' : 'project-next');
     });
     return;
   }
@@ -455,8 +453,9 @@
   if (sections.length === 0) return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileLayout = window.matchMedia('(max-width: 768px)');
 
-  if (prefersReducedMotion.matches) {
+  if (prefersReducedMotion.matches || mobileLayout.matches) {
     sections.forEach(section => section.classList.add('section-active'));
     return;
   }
