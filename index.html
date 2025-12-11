@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de" data-theme="light">
   <head>
-    <base href="/portfolio/">
+    <!-- <base href="/portfolio/"> -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
@@ -254,15 +254,16 @@
               </article>
             </div>
           </div>
-
-          <h3 class="section-sub hidden slide-up">Aktuell auf GitHub</h3>
-          <p class="muted hidden slide-up">Mein neuestes Projekt – automatisch geladen.</p>
-          <div id="gh-repos" class="github-showcase hidden fade-only" data-github-user="arduino" data-max="1">
-            <article class="github-featured-card skeleton">
-              <div class="repo-head"></div>
-              <div class="repo-desc"></div>
-              <div class="repo-stats"></div>
-            </article>
+          <div class="github-section">
+            <h3 class="section-sub hidden slide-up">Aktuell auf GitHub</h3>
+            <p class="muted hidden slide-up">Mein neuestes Projekt – automatisch geladen.</p>
+            <div id="gh-repos" class="github-showcase hidden fade-only" data-github-user="arduino" data-max="1">
+              <article class="github-featured-card skeleton">
+                <div class="repo-head"></div>
+                <div class="repo-desc"></div>
+                <div class="repo-stats"></div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -322,8 +323,39 @@
         </div>
       </section>
 
+      <section id="abschluss" class="section closing" aria-label="Abschluss">
+        <div class="container closing-inner">
+          <header>
+            <h2>Vielen Dank für Ihre Aufmerksamkeit!</h2>
+          </header>
+          <div class="closing-content">
+            <p class="closing-statement">
+              Ich stehe noch am Anfang in der Softwareentwicklung, bringe aber praktische Erfahrung,
+              Neugier und viel Lernbereitschaft mit. Ich freue mich darauf, mich in Ihrem Umfeld
+              weiterzuentwickeln.
+            </p>
+            
+            <p class="closing-thankyou">
+              Vielen Dank, dass Sie sich die Zeit genommen haben, meine Bewerbung hier anzusehen.
+            </p>
+  
+            <div class="closing-feedback">
+              <p>
+                Geben Sie mir gern ein kurzes, vorläufiges Feedback:
+              </p>
+              <p>
+                <button type="button" class="btn primary">
+                  Bewerbung angesehen 👍
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
       <!-- Kontakt / Call to Action (entfernt) -->
-      <!--
+      
       <section id="kontakt" class="section contact" aria-label="Kontakt">
         <div class="container">
           <header class="section-head">
@@ -364,32 +396,8 @@
           </div>
         </div>
       </section>
-      -->
-      <section id="abschluss" class="section closing" aria-label="Abschluss">
-      <div class="container">
-        <header>
-          <h2>Vielen Dank für Ihre Aufmerksamkeit!</h2>
-        </header>
-        <p>
-          Ich stehe noch am Anfang in der Softwareentwicklung, aber mit viel Praxis,
-          Neugier und echter Lust zu lernen. Wenn Sie sich mich in Ihrem Team
-          vorstellen können, freue ich mich auf ein persönliches Gespräch.
-        </p>
+     
 
-        <p class="muted">
-          Danke, dass Sie sich die Zeit genommen haben, meine Bewerbung hier auf der
-          Website zu lesen. Ich freue mich auf Ihre Rückmeldung!
-        </p>
-
-        <p>
-          Geben sie mir doch gerne ein vorläufiges Feedback, dass sie hier waren :-)
-        </p>
-
-        <button type="button" class="btn btn-primary">
-          Bewerbung gelesen 👍
-        </button>
-      </div>
-      </section>
     </main>
 
     <footer class="site-footer">
