@@ -151,12 +151,7 @@
   function escapeAttr(s) { return escapeHTML(s).replace(/\n/g, ''); }
 })();
 
-// Entferne Kontaktbereich und Links auf #kontakt, um tote Anker zu vermeiden
-(function () {
-  document.querySelectorAll('a[href="#kontakt"]').forEach((a) => a.remove());
-  const sec = document.getElementById('kontakt');
-  if (sec) sec.remove();
-})();
+
 
 // Scroll Animations mit Intersection Observer
 (function () {
@@ -529,4 +524,26 @@
       ticking = true;
     }
   }, { passive: true });
+})();
+
+// Footer Fade-in Animation when reaching end of page
+(function () {
+  const footer = document.querySelector('.site-footer');
+  if (!footer) return;
+
+  const footerObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          footer.classList.add('visible');
+        }
+      });
+    },
+    {
+      threshold: 0.1, // Trigger when 10% of footer is visible
+      rootMargin: '0px 0px -100px 0px' // Start animation slightly before footer enters viewport
+    }
+  );
+
+  footerObserver.observe(footer);
 })();
