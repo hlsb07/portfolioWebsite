@@ -136,7 +136,7 @@ svg { vertical-align: middle; }
 
 .projects .section-head {
   position: sticky;
-  top: 80px; /* Below main header */
+  top: 70px; /* Below main header */
   z-index: 10;
   background: color-mix(in oklab, var(--bg), transparent 8%);
   backdrop-filter: saturate(140%) blur(12px);
@@ -532,7 +532,7 @@ svg { vertical-align: middle; }
 /* Contact */
 .section.contact {
   min-height: 80vh;
-  padding: min(12vh, 7rem) 0;
+  padding: min(12vh, 7rem) 0 1rem 0;
 }
 
 .contact-grid {
@@ -641,7 +641,7 @@ svg { vertical-align: middle; }
 
   .site-footer {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-20px);
   }
 }
 
@@ -650,7 +650,7 @@ svg { vertical-align: middle; }
   border-top: 1px solid var(--line);
   background: color-mix(in oklab, var(--bg), transparent 8%);
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(-20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
@@ -886,6 +886,13 @@ html {
   will-change: transform, opacity;
 }
 
+/* Disable snap for contact and closing sections to allow scrolling to footer */
+/* .section.contact,
+.section.closing {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+} */
+
 /* ========================================
    Full-Page Scroll Experience (Like Projects)
    ======================================== */
@@ -915,6 +922,16 @@ html {
 }
 .section.resume .header{
   margin-top: 80px;
+}
+.section.resume .section-head {
+  position: sticky;
+  top: 70px; /* Below main header */
+  z-index: 10;
+  background: color-mix(in oklab, var(--bg), transparent 8%);
+  backdrop-filter: saturate(140%) blur(12px);
+  padding: 1.5rem 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--line);
 }
 
 /* Sticky containers for sections with content that fits in viewport */

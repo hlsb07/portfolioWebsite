@@ -1,0 +1,44 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: portfolio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portfolio_analytics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # External port 5433 to avoid conflict with your existing DB on 5432
+    networks:
+      - proxy-network
+
+  # Backend API (ASP.NET Core)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: portfolio-backend
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD:-change_me_in_production}"
+      Analytics__ServerSecret: ${ANALYTICS_SERVER_SECRET:-CHANGE_THIS_TO_A_RANDOM_SECRET}
+      ANALYTICS_PASSWORD: ${ANALYTICS_PASSWORD:-change-me-in-production}
+    ports:
+      - "5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true
+
+volumes:
+  postgres_data:
+    driver: local
