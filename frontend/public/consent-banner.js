@@ -113,7 +113,7 @@
         if (!apiBase) return;
 
         try {
-            await fetch(`${apiBase}/basic`, {
+            const response = await fetch(`${apiBase}/basic`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'omit', // absolutely no cookies or identifiers
@@ -123,7 +123,11 @@
                     device: getDeviceCategoryFromViewport()
                 })
             });
-            console.log('Consent: Sent basic page view ping (cookieless)');
+            if (!response.ok) {
+                console.warn('Consent: Basic page view ping rejected', response.status, response.statusText);
+                return;
+            }
+            console.log('Consent: Basic page view ping stored (cookieless)');
         } catch (error) {
             console.warn('Consent: Basic page view ping failed', error);
         }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using PortfolioAnalytics.Data;
 using PortfolioAnalytics.DTOs;
 using PortfolioAnalytics.Models;
@@ -85,7 +86,7 @@ public class AnalyticsController : ControllerBase
             // No content returned to avoid echoing data back to the client
             return NoContent();
         }
-        catch (DbUpdateException dbEx) when (dbEx.InnerException?.Message.Contains("duplicate key") == true)
+        catch (DbUpdateException dbEx) when (dbEx.InnerException?.Message.Contains("duplicate key", StringComparison.OrdinalIgnoreCase) == true)
         {
             // Handle race conditions on the unique index gracefully
             _logger.LogWarning(dbEx, "Duplicate basic page view aggregate detected for {Path} ({Device})", normalizedPath, deviceCategory);
@@ -103,6 +104,12 @@ public class AnalyticsController : ControllerBase
                 await _db.SaveChangesAsync();
             }
 
+            return NoContent();
+        }
+        catch (PostgresException pgEx) when (pgEx.SqlState == PostgresErrorCodes.UndefinedTable)
+        {
+            _logger.LogWarning(pgEx,
+                "Basic page view table missing. Run database migrations to enable essential-only tracking.");
             return NoContent();
         }
         catch (Exception ex)
@@ -454,6 +461,9 @@ public class AnalyticsController : ControllerBase
                 .OrderBy(x => x.Date)
                 .ToList();
 
+            // Essential-only (cookieless) traffic overview
+            var essentialStats = await GetEssentialOnlyStatsAsync(filterStart.Date, filterEnd.Date);
+
             return Ok(new
             {
                 period,
@@ -470,7 +480,10 @@ public class AnalyticsController : ControllerBase
                 browserStats,
                 sectionMetrics,
                 recentVisits,
-                dailyTrend
+                dailyTrend,
+                essentialPageViews = essentialStats.PageViews,
+                essentialDeviceStats = essentialStats.DeviceStats,
+                essentialPathStats = essentialStats.PathStats
             });
         }
         catch (Exception ex)
@@ -489,5 +502,49 @@ public class AnalyticsController : ControllerBase
             "tablet" => "tablet",
             _ => "unknown"
         };
+    }
+
+    private async Task<(int PageViews, List<object> DeviceStats, List<object> PathStats)> GetEssentialOnlyStatsAsync(
+        DateTime startDate,
+        DateTime endDate)
+    {
+        try
+        {
+            var essentialQuery = _db.BasicPageViewAggregates
+                .Where(v => v.Date >= startDate && v.Date <= endDate);
+
+            var pageViews = await essentialQuery.SumAsync(v => (int?)v.Count) ?? 0;
+
+            var deviceStats = await essentialQuery
+                .GroupBy(v => v.DeviceCategory)
+                .Select(g => new
+                {
+                    DeviceType = g.Key,
+                    Count = g.Sum(x => x.Count)
+                })
+                .OrderByDescending(x => x.Count)
+                .Cast<object>()
+                .ToListAsync();
+
+            var pathStats = await essentialQuery
+                .GroupBy(v => v.Path)
+                .Select(g => new
+                {
+                    Path = g.Key,
+                    Count = g.Sum(x => x.Count)
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(10)
+                .Cast<object>()
+                .ToListAsync();
+
+            return (pageViews, deviceStats, pathStats);
+        }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UndefinedTable)
+        {
+            _logger.LogWarning(ex,
+                "BasicPageViewAggregates table missing while loading essential-only stats. Apply latest migrations when convenient.");
+            return (0, new List<object>(), new List<object>());
+        }
     }
 }

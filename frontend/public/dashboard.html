@@ -276,6 +276,46 @@
             font-weight: 600;
             font-size: 11px;
         }
+
+        .essential-note {
+            font-size: 13px;
+            color: #555;
+            margin-top: 6px;
+        }
+
+        .path-list {
+            margin-top: 12px;
+            border: 1px solid #ececec;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .path-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            background: white;
+        }
+
+        .path-item:nth-child(odd) {
+            background: #fafafa;
+        }
+
+        .path-item:last-child {
+            border-bottom: none;
+        }
+
+        .path-label {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .path-count {
+            font-weight: 600;
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -338,6 +378,10 @@
                     <div class="stat-value" id="completionRate">-%</div>
                     <div class="stat-label">Completion Rate</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="essentialPageViews">-</div>
+                    <div class="stat-label">Essential-only Views</div>
+                </div>
             </div>
 
             <!-- Top Section -->
@@ -362,6 +406,19 @@
             <div class="chart-section">
                 <h2>🌐 Top Browsers</h2>
                 <div class="bar-chart" id="browserChart"></div>
+            </div>
+
+            <!-- Essential-only (cookieless) stats -->
+            <div class="chart-section">
+                <h2>?? Essential-only Device Mix</h2>
+                <p class="essential-note">Traffic recorded without cookies when visitors reject analytics.</p>
+                <div class="bar-chart" id="essentialDeviceChart"></div>
+            </div>
+
+            <div class="chart-section">
+                <h2>?? Top Essential-only Paths</h2>
+                <p class="essential-note">Most-accessed pages from essential-only mode (cookieless pings).</p>
+                <div class="path-list" id="essentialPathList"></div>
             </div>
 
             <!-- Recent Visits -->
@@ -444,6 +501,7 @@
                 document.getElementById('avgTime').textContent = data.avgTime + 's';
                 document.getElementById('bounceRate').textContent = data.bounceRate + '%';
                 document.getElementById('completionRate').textContent = data.completionRate + '%';
+                document.getElementById('essentialPageViews').textContent = data.essentialPageViews;
                 document.getElementById('topSection').textContent = data.topSection;
 
                 // Daily trend chart
@@ -499,6 +557,42 @@
                         </div>
                     `;
                 });
+
+                // Essential-only device chart
+                const essentialDeviceChart = document.getElementById('essentialDeviceChart');
+                essentialDeviceChart.innerHTML = '';
+                if (data.essentialDeviceStats && data.essentialDeviceStats.length > 0) {
+                    const maxEssentialDevice = Math.max(...data.essentialDeviceStats.map(d => d.count), 1);
+                    data.essentialDeviceStats.forEach(device => {
+                        const width = (device.count / maxEssentialDevice) * 100;
+                        essentialDeviceChart.innerHTML += `
+                            <div class="bar-item">
+                                <div class="bar-label">${device.deviceType}</div>
+                                <div class="bar-visual" style="width: ${width}%">
+                                    <span class="bar-count">${device.count}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    essentialDeviceChart.innerHTML = '<p style="color: #999; font-size: 14px;">No essential-only traffic recorded for this period.</p>';
+                }
+
+                // Essential-only path list
+                const essentialPathList = document.getElementById('essentialPathList');
+                essentialPathList.innerHTML = '';
+                if (data.essentialPathStats && data.essentialPathStats.length > 0) {
+                    data.essentialPathStats.forEach(path => {
+                        essentialPathList.innerHTML += `
+                            <div class="path-item">
+                                <span class="path-label">${path.path}</span>
+                                <span class="path-count">${path.count}</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    essentialPathList.innerHTML = '<p style="color: #999; padding: 12px;">No essential-only paths recorded for this period.</p>';
+                }
 
                 // Recent visits
                 const recentVisits = document.getElementById('recentVisits');
