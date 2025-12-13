@@ -19,7 +19,45 @@ builder.Services.AddDbContext<AnalyticsDbContext>(options =>
 // Register custom services
 builder.Services.AddScoped<SessionService>();
 builder.Services.AddScoped<AggregationService>();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddHostedService<DataRetentionBackgroundService>();
+
+// Configure SMTP settings from appsettings.json and environment variables
+builder.Services.Configure<PortfolioAnalytics.Models.SmtpSettings>(options =>
+{
+    // Load from appsettings.json first
+    builder.Configuration.GetSection("SmtpSettings").Bind(options);
+
+    // Override with environment variables if present (for Docker/production)
+    var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
+    var smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT");
+    var smtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME");
+    var smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
+    var smtpSenderName = Environment.GetEnvironmentVariable("SMTP_SENDER_NAME");
+    var smtpRecipientEmail = Environment.GetEnvironmentVariable("SMTP_RECIPIENT_EMAIL");
+    var smtpEnableSsl = Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL");
+
+    if (!string.IsNullOrEmpty(smtpHost))
+        options.Host = smtpHost;
+
+    if (!string.IsNullOrEmpty(smtpPort) && int.TryParse(smtpPort, out var port))
+        options.Port = port;
+
+    if (!string.IsNullOrEmpty(smtpUsername))
+        options.Username = smtpUsername;
+
+    if (!string.IsNullOrEmpty(smtpPassword))
+        options.Password = smtpPassword;
+
+    if (!string.IsNullOrEmpty(smtpSenderName))
+        options.SenderName = smtpSenderName;
+
+    if (!string.IsNullOrEmpty(smtpRecipientEmail))
+        options.RecipientEmail = smtpRecipientEmail;
+
+    if (!string.IsNullOrEmpty(smtpEnableSsl) && bool.TryParse(smtpEnableSsl, out var enableSsl))
+        options.EnableSsl = enableSsl;
+});
 
 // Configure CORS
 builder.Services.AddCors(options =>

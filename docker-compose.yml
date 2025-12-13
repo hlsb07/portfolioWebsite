@@ -29,19 +29,25 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
-      ASPNETCORE_URLS: "http://+:5000"
       ConnectionStrings__DefaultConnection: "Host=postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD:-change_me_in_production}"
       Analytics__ServerSecret: ${ANALYTICS_SERVER_SECRET:-CHANGE_THIS_TO_A_RANDOM_SECRET}
       ANALYTICS_PASSWORD: ${ANALYTICS_PASSWORD:-change-me-in-production}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_SENDER_NAME: ${SMTP_SENDER_NAME}
+      SMTP_RECIPIENT_EMAIL: ${SMTP_RECIPIENT_EMAIL}
+      SMTP_ENABLE_SSL: ${SMTP_ENABLE_SSL}
     ports:
-      - "5000:5000"
+      - "5000:8080"
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - proxy-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
