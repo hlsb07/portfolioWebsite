@@ -29,6 +29,90 @@ public class AnalyticsController : ControllerBase
     }
 
     /// <summary>
+    /// Cookieless, aggregated page view tracking for essential-only mode.
+    /// Stores only counts per date/path/device with no identifiers.
+    /// </summary>
+    [HttpPost("basic")]
+    public async Task<IActionResult> TrackBasicPageView([FromBody] BasicPageViewDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Path))
+        {
+            return BadRequest("Path is required");
+        }
+
+        var normalizedPath = dto.Path.Trim();
+        if (normalizedPath.Length > 500)
+        {
+            normalizedPath = normalizedPath[..500];
+        }
+        if (!normalizedPath.StartsWith('/'))
+        {
+            normalizedPath = "/" + normalizedPath;
+        }
+
+        var deviceCategory = NormalizeDeviceCategory(dto.Device);
+        var today = DateTime.UtcNow.Date;
+
+        try
+        {
+            var aggregate = await _db.BasicPageViewAggregates
+                .FirstOrDefaultAsync(a =>
+                    a.Date == today &&
+                    a.Path == normalizedPath &&
+                    a.DeviceCategory == deviceCategory);
+
+            if (aggregate == null)
+            {
+                aggregate = new BasicPageViewAggregate
+                {
+                    Date = today,
+                    Path = normalizedPath,
+                    DeviceCategory = deviceCategory,
+                    Count = 1,
+                    LastSeenAt = DateTime.UtcNow
+                };
+
+                _db.BasicPageViewAggregates.Add(aggregate);
+            }
+            else
+            {
+                aggregate.Count += 1;
+                aggregate.LastSeenAt = DateTime.UtcNow;
+            }
+
+            await _db.SaveChangesAsync();
+
+            // No content returned to avoid echoing data back to the client
+            return NoContent();
+        }
+        catch (DbUpdateException dbEx) when (dbEx.InnerException?.Message.Contains("duplicate key") == true)
+        {
+            // Handle race conditions on the unique index gracefully
+            _logger.LogWarning(dbEx, "Duplicate basic page view aggregate detected for {Path} ({Device})", normalizedPath, deviceCategory);
+
+            var aggregate = await _db.BasicPageViewAggregates
+                .FirstOrDefaultAsync(a =>
+                    a.Date == today &&
+                    a.Path == normalizedPath &&
+                    a.DeviceCategory == deviceCategory);
+
+            if (aggregate != null)
+            {
+                aggregate.Count += 1;
+                aggregate.LastSeenAt = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error tracking basic page view for {Path}", normalizedPath);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    /// <summary>
     /// Tracks a new page visit
     /// </summary>
     [HttpPost("visit")]
@@ -394,5 +478,16 @@ public class AnalyticsController : ControllerBase
             _logger.LogError(ex, "Error getting stats");
             return StatusCode(500, "Internal server error");
         }
+    }
+
+    private static string NormalizeDeviceCategory(string? device)
+    {
+        return device?.Trim().ToLowerInvariant() switch
+        {
+            "mobile" => "mobile",
+            "desktop" => "desktop",
+            "tablet" => "tablet",
+            _ => "unknown"
+        };
     }
 }

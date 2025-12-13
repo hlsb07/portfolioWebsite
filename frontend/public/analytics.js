@@ -67,6 +67,9 @@
         minSectionDuration: 1000
     };
 
+    // Share API base for consent script to send cookieless pings without duplicating logic
+    window.ANALYTICS_API_BASE = CONFIG.apiBaseUrl;
+
     // State management
     let state = {
         sessionId: null,

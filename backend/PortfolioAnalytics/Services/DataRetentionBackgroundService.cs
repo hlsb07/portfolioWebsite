@@ -15,6 +15,7 @@ public class DataRetentionBackgroundService : BackgroundService
     // Retention policies
     private const int RAW_DATA_RETENTION_DAYS = 14;
     private const int AGGREGATE_RETENTION_DAYS = 30;
+    private const int BASIC_PAGE_VIEW_RETENTION_DAYS = 365;
 
     // Run daily at 2 AM UTC
     private readonly TimeSpan _scheduleTime = new TimeSpan(2, 0, 0);
@@ -129,15 +130,38 @@ public class DataRetentionBackgroundService : BackgroundService
             }
         }
         catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error deleting aggregates");
-        }
+            {
+                _logger.LogError(ex, "Error deleting aggregates");
+            }
 
-        // Step 4: Delete expired sessions (housekeeping)
-        try
-        {
-            var expiredSessions = await db.Sessions
-                .Where(s => s.ExpiresAt < DateTime.UtcNow)
+            // Step 3b: Delete basic page view aggregates older than retention period (cookieless counts)
+            var basicPageViewCutoff = DateTime.UtcNow.AddDays(-BASIC_PAGE_VIEW_RETENTION_DAYS).Date;
+            try
+            {
+                var oldBasicPageViews = await db.BasicPageViewAggregates
+                    .Where(v => v.Date < basicPageViewCutoff)
+                    .ToListAsync();
+
+                if (oldBasicPageViews.Any())
+                {
+                    db.BasicPageViewAggregates.RemoveRange(oldBasicPageViews);
+                    await db.SaveChangesAsync();
+                    _logger.LogInformation(
+                        "Deleted {Count} basic page view aggregates (older than {Days} days)",
+                        oldBasicPageViews.Count,
+                        BASIC_PAGE_VIEW_RETENTION_DAYS);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting old basic page view aggregates");
+            }
+
+            // Step 4: Delete expired sessions (housekeeping)
+            try
+            {
+                var expiredSessions = await db.Sessions
+                    .Where(s => s.ExpiresAt < DateTime.UtcNow)
                 .ToListAsync();
 
             if (expiredSessions.Any())

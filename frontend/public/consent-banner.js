@@ -10,6 +10,9 @@
 (function() {
     'use strict';
 
+    const ESSENTIAL_NOTICE_ID = 'analytics-essential-notice';
+    let basicPingSent = false;
+
     /**
      * Cookie utility functions
      */
@@ -42,7 +45,105 @@
     }
 
     function deleteCookie(name) {
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+        let cookieString = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax`;
+        if (window.location.protocol === 'https:') {
+            cookieString += ';Secure';
+        }
+        document.cookie = cookieString;
+    }
+
+    /**
+     * Essential-only UI helpers
+     */
+    function showEssentialOnlyNotice() {
+        const notice = document.getElementById(ESSENTIAL_NOTICE_ID);
+        if (notice) {
+            notice.style.display = 'block';
+        }
+    }
+
+    function hideEssentialOnlyNotice() {
+        const notice = document.getElementById(ESSENTIAL_NOTICE_ID);
+        if (notice) {
+            notice.style.display = 'none';
+        }
+    }
+
+    /**
+     * Minimal device detection without user-agent parsing
+     */
+    function getDeviceCategoryFromViewport() {
+        const width = window.innerWidth || document.documentElement.clientWidth || 0;
+        return width < 768 ? 'mobile' : 'desktop';
+    }
+
+    /**
+     * Share the API base URL logic without triggering analytics
+     */
+    function getApiBaseUrl() {
+        if (window.ANALYTICS_API_BASE) {
+            return window.ANALYTICS_API_BASE;
+        }
+
+        const hostname = window.location.hostname;
+        const protocol = window.location.protocol;
+        const isLocal = hostname === 'localhost' ||
+            hostname === '127.0.0.1' ||
+            hostname.endsWith('.local') ||
+            /^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
+            /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
+            /^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
+            hostname.includes('-');
+
+        if (isLocal) {
+            return `${protocol}//${hostname}:5000/api/analytics`;
+        }
+
+        return 'https://api.jan-huelsbrink.de/api/analytics';
+    }
+
+    /**
+     * Optional, cookieless page view ping for essential-only mode
+     */
+    async function sendBasicPageViewPing() {
+        if (basicPingSent) return;
+        basicPingSent = true;
+
+        const apiBase = getApiBaseUrl();
+        if (!apiBase) return;
+
+        try {
+            await fetch(`${apiBase}/basic`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'omit', // absolutely no cookies or identifiers
+                keepalive: true,
+                body: JSON.stringify({
+                    path: window.location.pathname,
+                    device: getDeviceCategoryFromViewport()
+                })
+            });
+            console.log('Consent: Sent basic page view ping (cookieless)');
+        } catch (error) {
+            console.warn('Consent: Basic page view ping failed', error);
+        }
+    }
+
+    /**
+     * Enforce essential-only mode after rejection
+     */
+    function enterEssentialOnlyMode() {
+        // Remove any analytics session identifiers
+        deleteCookie('analytics_session');
+        try {
+            localStorage.removeItem('analytics_session');
+            sessionStorage.removeItem('analytics_session');
+        } catch (storageError) {
+            console.warn('Consent: Unable to clear storage', storageError);
+        }
+
+        showEssentialOnlyNotice();
+        sendBasicPageViewPing();
     }
 
     /**
@@ -60,6 +161,9 @@
         if (!accepted) {
             // Delete session cookie if user rejects
             deleteCookie('analytics_session');
+            enterEssentialOnlyMode();
+        } else {
+            hideEssentialOnlyNotice();
         }
     }
 
@@ -107,6 +211,7 @@
     function onRejectConsent() {
         setConsent(false);
         hideConsentBanner();
+        console.log('Consent: User rejected analytics - switching to essential-only mode');
     }
 
     /**
@@ -131,6 +236,9 @@
             if (window.initializeAnalytics) {
                 window.initializeAnalytics();
             }
+        } else if (consent === 'rejected') {
+            console.log('Consent: Already rejected - enforcing essential-only mode');
+            enterEssentialOnlyMode();
         }
 
         // Attach event listeners
@@ -151,7 +259,8 @@
         hasConsent,
         setConsent,
         showConsentBanner,
-        hideConsentBanner
+        hideConsentBanner,
+        enterEssentialOnlyMode
     };
 
     /**

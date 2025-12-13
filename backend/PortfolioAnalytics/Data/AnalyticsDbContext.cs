@@ -18,12 +18,25 @@ public class AnalyticsDbContext : DbContext
     public DbSet<Visit> Visits => Set<Visit>();
     public DbSet<ScrollEvent> ScrollEvents => Set<ScrollEvent>();
     public DbSet<SectionEvent> SectionEvents => Set<SectionEvent>();
+    public DbSet<BasicPageViewAggregate> BasicPageViewAggregates => Set<BasicPageViewAggregate>();
     public DbSet<DailyAggregate> DailyAggregates => Set<DailyAggregate>();
     public DbSet<WeeklyAggregate> WeeklyAggregates => Set<WeeklyAggregate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Basic, cookieless page view aggregation (essential-only mode)
+        modelBuilder.Entity<BasicPageViewAggregate>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.LastSeenAt);
+            entity.HasIndex(e => new { e.Date, e.Path, e.DeviceCategory }).IsUnique();
+            entity.Property(e => e.Path).HasMaxLength(500);
+            entity.Property(e => e.DeviceCategory).HasMaxLength(50);
+            entity.Property(e => e.LastSeenAt).HasDefaultValueSql("NOW()");
+            entity.Property(e => e.Date).HasDefaultValueSql("NOW()");
+        });
 
         // Session configuration
         modelBuilder.Entity<Session>(entity =>
