@@ -1,14 +1,14 @@
 namespace PortfolioAnalytics.Models;
 
 /// <summary>
-/// Represents a single page visit/session
+/// Represents a single page visit within a session
 /// </summary>
 public class Visit
 {
     public int Id { get; set; }
 
-    public int VisitorId { get; set; }
-    public Visitor Visitor { get; set; } = null!;
+    public int SessionId { get; set; }
+    public Session Session { get; set; } = null!;
 
     /// <summary>
     /// The page path that was visited (e.g., "/", "/projects")

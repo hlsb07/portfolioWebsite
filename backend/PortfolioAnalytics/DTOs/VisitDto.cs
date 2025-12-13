@@ -6,9 +6,9 @@ namespace PortfolioAnalytics.DTOs;
 public class VisitDto
 {
     /// <summary>
-    /// Anonymous visitor ID hash generated on the client
+    /// Session ID (UUID) from cookie
     /// </summary>
-    public string AnonymousIdHash { get; set; } = null!;
+    public string SessionId { get; set; } = null!;
 
     /// <summary>
     /// Page path being visited

@@ -6,9 +6,9 @@ namespace PortfolioAnalytics.DTOs;
 public class ScrollDto
 {
     /// <summary>
-    /// Anonymous visitor ID hash
+    /// Session ID (UUID) from cookie
     /// </summary>
-    public string AnonymousIdHash { get; set; } = null!;
+    public string SessionId { get; set; } = null!;
 
     /// <summary>
     /// Scroll depth as a percentage (0-100)

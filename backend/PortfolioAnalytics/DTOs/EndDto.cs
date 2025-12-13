@@ -6,9 +6,9 @@ namespace PortfolioAnalytics.DTOs;
 public class EndDto
 {
     /// <summary>
-    /// Anonymous visitor ID hash
+    /// Session ID (UUID) from cookie
     /// </summary>
-    public string AnonymousIdHash { get; set; } = null!;
+    public string SessionId { get; set; } = null!;
 
     /// <summary>
     /// Total duration of the visit in milliseconds

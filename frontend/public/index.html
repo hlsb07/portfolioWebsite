@@ -9,6 +9,90 @@
     <meta name="description" content="One-Page Portfolio: Projekte, Lebenslauf und Kontakt. Vom SPS/PLC-Programmierer zum Web-/Frontend-Entwickler." />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      /* GDPR Consent Banner Styles */
+      .consent-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        z-index: 10000;
+        border-top: 3px solid #667eea;
+      }
+
+      .consent-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .consent-content h3 {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        color: #333;
+      }
+
+      .consent-content p {
+        margin: 0 0 15px 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .consent-content a {
+        color: #667eea;
+        text-decoration: underline;
+      }
+
+      .consent-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .consent-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .consent-accept {
+        background: #667eea;
+        color: white;
+      }
+
+      .consent-accept:hover {
+        background: #5568d3;
+      }
+
+      .consent-reject {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .consent-reject:hover {
+        background: #d0d0d0;
+      }
+
+      @media (max-width: 768px) {
+        .consent-banner {
+          padding: 15px;
+        }
+
+        .consent-buttons {
+          flex-direction: column;
+        }
+
+        .consent-btn {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#start">Zum Inhalt springen</a>
@@ -403,12 +487,37 @@
         <ul class="footer-links">
           <li><a href="#start">Nach oben</a></li>
           <li><a href="#">Impressum (Platzhalter)</a></li>
-          <li><a href="#">Datenschutz (Platzhalter)</a></li>
+          <li><a href="privacy.html">Datenschutz</a></li>
         </ul>
       </div>
     </footer>
 
+    <!-- GDPR Consent Banner -->
+    <div id="consent-banner" class="consent-banner" style="display: none;">
+      <div class="consent-content">
+        <h3>Cookie-Hinweis</h3>
+        <p>
+          Wir verwenden Cookies, um zu verstehen, wie Sie unsere Website nutzen, und um Ihre Erfahrung zu verbessern.
+          Dies umfasst Analytik-Cookies, die uns helfen, den Website-Traffic und Nutzungsmuster zu analysieren.
+          Alle Daten sind anonymisiert und werden nur für die Dauer Ihrer Sitzung gespeichert (30 Minuten).
+        </p>
+        <p>
+          <a href="privacy.html" target="_blank">Lesen Sie unsere Datenschutzerklärung</a>
+        </p>
+        <div class="consent-buttons">
+          <button id="consent-accept" class="consent-btn consent-accept">Akzeptieren</button>
+          <button id="consent-reject" class="consent-btn consent-reject">Ablehnen</button>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
+    <!-- Load consent banner BEFORE analytics -->
+    <script src="consent-banner.js"></script>
     <script src="analytics.js"></script>
+
+    <!-- Temporary mobile debugging console for iOS -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
   </body>
   </html>

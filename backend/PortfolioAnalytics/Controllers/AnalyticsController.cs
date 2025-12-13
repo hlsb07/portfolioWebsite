@@ -8,77 +8,24 @@ using PortfolioAnalytics.Services;
 namespace PortfolioAnalytics.Controllers;
 
 /// <summary>
-/// Controller for handling GDPR-compliant analytics tracking
+/// Controller for handling GDPR-compliant, session-based analytics tracking
 /// </summary>
 [ApiController]
 [Route("api/analytics")]
 public class AnalyticsController : ControllerBase
 {
     private readonly AnalyticsDbContext _db;
-    private readonly AnonymousIdService _anonymousIdService;
-    private readonly DeviceDetectionService _deviceDetectionService;
+    private readonly SessionService _sessionService;
     private readonly ILogger<AnalyticsController> _logger;
 
     public AnalyticsController(
         AnalyticsDbContext db,
-        AnonymousIdService anonymousIdService,
-        DeviceDetectionService deviceDetectionService,
+        SessionService sessionService,
         ILogger<AnalyticsController> logger)
     {
         _db = db;
-        _anonymousIdService = anonymousIdService;
-        _deviceDetectionService = deviceDetectionService;
+        _sessionService = sessionService;
         _logger = logger;
-    }
-
-    /// <summary>
-    /// Gets or creates a visitor based on their anonymous ID hash
-    /// Also updates device information if it has changed
-    /// </summary>
-    private async Task<Visitor?> GetOrCreateVisitorAsync(string anonymousIdHash, string? userAgent)
-    {
-        var visitor = await _db.Visitors
-            .Include(v => v.DeviceInfos)
-            .FirstOrDefaultAsync(v => v.AnonymousIdHash == anonymousIdHash);
-
-        if (visitor != null)
-        {
-            visitor.LastSeen = DateTime.UtcNow;
-
-            // Update device info if User-Agent changed
-            if (!string.IsNullOrEmpty(userAgent))
-            {
-                var hasDevice = visitor.DeviceInfos.Any();
-                if (!hasDevice)
-                {
-                    var deviceInfo = _deviceDetectionService.ParseUserAgent(userAgent, visitor.Id);
-                    _db.DeviceInfos.Add(deviceInfo);
-                }
-            }
-
-            return visitor;
-        }
-
-        // Create new visitor
-        visitor = new Visitor
-        {
-            AnonymousIdHash = anonymousIdHash,
-            FirstSeen = DateTime.UtcNow,
-            LastSeen = DateTime.UtcNow
-        };
-
-        _db.Visitors.Add(visitor);
-        await _db.SaveChangesAsync();
-
-        // Add device info for new visitor
-        if (!string.IsNullOrEmpty(userAgent))
-        {
-            var deviceInfo = _deviceDetectionService.ParseUserAgent(userAgent, visitor.Id);
-            _db.DeviceInfos.Add(deviceInfo);
-            await _db.SaveChangesAsync();
-        }
-
-        return visitor;
     }
 
     /// <summary>
@@ -89,20 +36,21 @@ public class AnalyticsController : ControllerBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(dto.AnonymousIdHash) || string.IsNullOrWhiteSpace(dto.Page))
+            if (string.IsNullOrWhiteSpace(dto.SessionId) || string.IsNullOrWhiteSpace(dto.Page))
             {
-                return BadRequest("AnonymousIdHash and Page are required");
+                return BadRequest("SessionId and Page are required");
             }
 
-            var visitor = await GetOrCreateVisitorAsync(dto.AnonymousIdHash, dto.UserAgent);
-            if (visitor == null)
+            // Validate/create session
+            var session = await _sessionService.GetOrCreateSessionAsync(dto.SessionId, dto.UserAgent);
+            if (session == null)
             {
-                return BadRequest("Failed to create or retrieve visitor");
+                return BadRequest("Session expired or invalid");
             }
 
             var visit = new Visit
             {
-                VisitorId = visitor.Id,
+                SessionId = session.Id,
                 Page = dto.Page,
                 Referrer = dto.Referrer,
                 Timestamp = DateTime.UtcNow,
@@ -112,7 +60,7 @@ public class AnalyticsController : ControllerBase
             _db.Visits.Add(visit);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Tracked visit for page: {Page}", dto.Page);
+            _logger.LogInformation("Tracked visit for session: {SessionId}, page: {Page}", dto.SessionId, dto.Page);
 
             return Ok(new { visitId = visit.Id });
         }
@@ -131,22 +79,28 @@ public class AnalyticsController : ControllerBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(dto.AnonymousIdHash))
+            if (string.IsNullOrWhiteSpace(dto.SessionId))
             {
-                return BadRequest("AnonymousIdHash is required");
+                return BadRequest("SessionId is required");
             }
 
-            var visitor = await _db.Visitors
-                .Include(v => v.Visits)
-                .FirstOrDefaultAsync(v => v.AnonymousIdHash == dto.AnonymousIdHash);
-
-            if (visitor == null)
+            // Validate session
+            if (!await _sessionService.ValidateSessionAsync(dto.SessionId))
             {
-                return NotFound("Visitor not found");
+                return BadRequest("Session expired or invalid");
+            }
+
+            var session = await _db.Sessions
+                .Include(s => s.Visits)
+                .FirstOrDefaultAsync(s => s.SessionId == dto.SessionId);
+
+            if (session == null)
+            {
+                return NotFound("Session not found");
             }
 
             // Get the most recent visit
-            var visit = visitor.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
+            var visit = session.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
             if (visit == null)
             {
                 return NotFound("No active visit found");
@@ -175,7 +129,7 @@ public class AnalyticsController : ControllerBase
             _db.ScrollEvents.Add(scrollEvent);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Tracked scroll: {Depth}%", normalizedDepth);
+            _logger.LogInformation("Tracked scroll: {Depth}% for session {SessionId}", normalizedDepth, dto.SessionId);
 
             return Ok();
         }
@@ -194,22 +148,28 @@ public class AnalyticsController : ControllerBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(dto.AnonymousIdHash) || string.IsNullOrWhiteSpace(dto.SectionName))
+            if (string.IsNullOrWhiteSpace(dto.SessionId) || string.IsNullOrWhiteSpace(dto.SectionName))
             {
-                return BadRequest("AnonymousIdHash and SectionName are required");
+                return BadRequest("SessionId and SectionName are required");
             }
 
-            var visitor = await _db.Visitors
-                .Include(v => v.Visits)
-                .FirstOrDefaultAsync(v => v.AnonymousIdHash == dto.AnonymousIdHash);
-
-            if (visitor == null)
+            // Validate session
+            if (!await _sessionService.ValidateSessionAsync(dto.SessionId))
             {
-                return NotFound("Visitor not found");
+                return BadRequest("Session expired or invalid");
+            }
+
+            var session = await _db.Sessions
+                .Include(s => s.Visits)
+                .FirstOrDefaultAsync(s => s.SessionId == dto.SessionId);
+
+            if (session == null)
+            {
+                return NotFound("Session not found");
             }
 
             // Get the most recent visit
-            var visit = visitor.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
+            var visit = session.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
             if (visit == null)
             {
                 return NotFound("No active visit found");
@@ -226,7 +186,8 @@ public class AnalyticsController : ControllerBase
             _db.SectionEvents.Add(sectionEvent);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Tracked section: {Section} ({Duration}ms)", dto.SectionName, dto.DurationMs);
+            _logger.LogInformation("Tracked section: {Section} ({Duration}ms) for session {SessionId}",
+                dto.SectionName, dto.DurationMs, dto.SessionId);
 
             return Ok();
         }
@@ -245,22 +206,22 @@ public class AnalyticsController : ControllerBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(dto.AnonymousIdHash))
+            if (string.IsNullOrWhiteSpace(dto.SessionId))
             {
-                return BadRequest("AnonymousIdHash is required");
+                return BadRequest("SessionId is required");
             }
 
-            var visitor = await _db.Visitors
-                .Include(v => v.Visits)
-                .FirstOrDefaultAsync(v => v.AnonymousIdHash == dto.AnonymousIdHash);
+            var session = await _db.Sessions
+                .Include(s => s.Visits)
+                .FirstOrDefaultAsync(s => s.SessionId == dto.SessionId);
 
-            if (visitor == null)
+            if (session == null)
             {
-                return NotFound("Visitor not found");
+                return NotFound("Session not found");
             }
 
             // Get the most recent visit
-            var visit = visitor.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
+            var visit = session.Visits.OrderByDescending(v => v.Timestamp).FirstOrDefault();
             if (visit == null)
             {
                 return NotFound("No active visit found");
@@ -269,7 +230,8 @@ public class AnalyticsController : ControllerBase
             visit.DurationMs = dto.DurationMs;
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Ended visit with duration: {Duration}ms", dto.DurationMs);
+            _logger.LogInformation("Ended visit with duration: {Duration}ms for session {SessionId}",
+                dto.DurationMs, dto.SessionId);
 
             return Ok();
         }
@@ -282,9 +244,14 @@ public class AnalyticsController : ControllerBase
 
     /// <summary>
     /// Gets aggregated analytics statistics for the dashboard
+    /// NOW WITH TIME-BASED FILTERING
     /// </summary>
     [HttpGet("stats")]
-    public async Task<IActionResult> GetStats([FromQuery] string? password)
+    public async Task<IActionResult> GetStats(
+        [FromQuery] string? password,
+        [FromQuery] string? period = "week", // all, today, week, month
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
         try
         {
@@ -297,36 +264,91 @@ public class AnalyticsController : ControllerBase
                 return Unauthorized("Invalid password");
             }
 
-            var totalVisitors = await _db.Visitors.CountAsync();
-            var totalVisits = await _db.Visits.CountAsync();
+            // Determine date range
+            var now = DateTime.UtcNow;
+            DateTime filterStart = period switch
+            {
+                "today" => now.Date,
+                "week" => now.AddDays(-7),
+                "month" => now.AddDays(-30),
+                _ => DateTime.MinValue // "all"
+            };
 
-            var avgScrollDepth = await _db.ScrollEvents.AnyAsync()
-                ? (int)await _db.ScrollEvents.AverageAsync(e => e.ScrollDepthPercent)
-                : 0;
+            if (startDate.HasValue) filterStart = startDate.Value;
+            var filterEnd = endDate ?? now;
 
-            var avgTimeSeconds = await _db.Visits.Where(v => v.DurationMs > 0).AnyAsync()
-                ? (int)(await _db.Visits.Where(v => v.DurationMs > 0).AverageAsync(v => v.DurationMs) / 1000)
-                : 0;
-
-            var topSection = await _db.SectionEvents
-                .GroupBy(e => e.SectionName)
-                .OrderByDescending(g => g.Sum(e => e.DurationMs))
-                .Select(g => g.Key)
-                .FirstOrDefaultAsync() ?? "N/A";
-
-            var deviceStats = await _db.DeviceInfos
-                .GroupBy(d => d.DeviceType)
-                .Select(g => new { DeviceType = g.Key ?? "Unknown", Count = g.Count() })
+            // Query sessions and visits in date range
+            var sessions = await _db.Sessions
+                .Where(s => s.CreatedAt >= filterStart && s.CreatedAt <= filterEnd)
+                .Include(s => s.Visits)
                 .ToListAsync();
 
-            var browserStats = await _db.DeviceInfos
-                .GroupBy(d => d.BrowserFamily)
+            var visits = sessions.SelectMany(s => s.Visits).ToList();
+            var visitIds = visits.Select(v => v.Id).ToList();
+
+            // Calculate metrics
+            var totalSessions = sessions.Count;
+            var totalVisits = visits.Count;
+
+            var avgScrollDepth = await _db.ScrollEvents
+                .Where(e => e.Timestamp >= filterStart && e.Timestamp <= filterEnd)
+                .AnyAsync()
+                    ? (int)await _db.ScrollEvents
+                        .Where(e => e.Timestamp >= filterStart && e.Timestamp <= filterEnd)
+                        .AverageAsync(e => e.ScrollDepthPercent)
+                    : 0;
+
+            var avgTime = visits.Where(v => v.DurationMs > 0).Any()
+                ? (int)(visits.Where(v => v.DurationMs > 0).Average(v => v.DurationMs) / 1000)
+                : 0;
+
+            // Bounce rate: sessions with < 10 seconds total visit duration
+            var bounceCount = visits.Count(v => v.DurationMs < 10000);
+            var bounceRate = totalSessions > 0
+                ? (int)(bounceCount / (double)totalSessions * 100)
+                : 0;
+
+            // Completion rate: sessions with >=100% scroll OR >60s duration
+            var completedVisits = visits.Where(v =>
+                v.DurationMs > 60000 ||
+                _db.ScrollEvents.Any(e => e.VisitId == v.Id && e.ScrollDepthPercent >= 100)
+            ).Count();
+
+            var completionRate = totalSessions > 0
+                ? (int)(completedVisits / (double)totalSessions * 100)
+                : 0;
+
+            // Device breakdown
+            var deviceStats = sessions
+                .GroupBy(s => s.DeviceCategory ?? "Unknown")
+                .Select(g => new { DeviceType = g.Key, Count = g.Count() })
+                .ToList();
+
+            // Browser breakdown
+            var browserStats = sessions
+                .GroupBy(s => s.BrowserFamily ?? "Unknown")
                 .Select(g => new { Browser = g.Key, Count = g.Count() })
                 .OrderByDescending(x => x.Count)
                 .Take(5)
+                .ToList();
+
+            // Section metrics
+            var sectionMetrics = await _db.SectionEvents
+                .Where(e => e.Timestamp >= filterStart && e.Timestamp <= filterEnd)
+                .GroupBy(e => e.SectionName)
+                .Select(g => new
+                {
+                    Section = g.Key,
+                    Views = g.Count(),
+                    AvgDurationSeconds = (int)(g.Average(e => e.DurationMs) / 1000)
+                })
+                .OrderByDescending(x => x.AvgDurationSeconds)
                 .ToListAsync();
 
-            var recentVisits = await _db.Visits
+            var topSection = sectionMetrics.FirstOrDefault()?.Section ?? "N/A";
+
+            // Recent visits (last 10)
+            var recentVisits = visits
                 .OrderByDescending(v => v.Timestamp)
                 .Take(10)
                 .Select(v => new
@@ -335,18 +357,36 @@ public class AnalyticsController : ControllerBase
                     v.Timestamp,
                     DurationSeconds = v.DurationMs / 1000
                 })
-                .ToListAsync();
+                .ToList();
+
+            // Daily trend data (for chart)
+            var dailyTrend = sessions
+                .GroupBy(s => s.CreatedAt.Date)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Sessions = g.Count()
+                })
+                .OrderBy(x => x.Date)
+                .ToList();
 
             return Ok(new
             {
-                visitors = totalVisitors,
+                period,
+                startDate = filterStart,
+                endDate = filterEnd,
+                sessions = totalSessions,
                 visits = totalVisits,
                 avgScroll = avgScrollDepth,
-                avgTime = avgTimeSeconds,
+                avgTime,
+                bounceRate,
+                completionRate,
                 topSection,
                 deviceStats,
                 browserStats,
-                recentVisits
+                sectionMetrics,
+                recentVisits,
+                dailyTrend
             });
         }
         catch (Exception ex)

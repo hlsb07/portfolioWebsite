@@ -211,6 +211,71 @@
             color: #667eea;
             padding: 40px;
         }
+
+        .period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .period-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .period-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .trend-chart {
+            margin-top: 15px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .trend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .trend-date {
+            min-width: 100px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .trend-bar {
+            flex: 1;
+            height: 24px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .trend-value {
+            color: white;
+            font-weight: 600;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -239,11 +304,19 @@
 
         <div id="loadingMsg" class="loading">Loading analytics data...</div>
         <div id="statsContent" style="display: none;">
+            <!-- Time Period Selector -->
+            <div class="period-selector">
+                <button class="period-btn" data-period="all" onclick="setPeriod('all')">All Time</button>
+                <button class="period-btn active" data-period="week" onclick="setPeriod('week')">Last 7 Days</button>
+                <button class="period-btn" data-period="month" onclick="setPeriod('month')">Last 30 Days</button>
+                <button class="period-btn" data-period="today" onclick="setPeriod('today')">Today</button>
+            </div>
+
             <!-- Overview Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="totalVisitors">-</div>
-                    <div class="stat-label">Total Visitors</div>
+                    <div class="stat-value" id="totalSessions">-</div>
+                    <div class="stat-label">Total Sessions</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalVisits">-</div>
@@ -257,12 +330,26 @@
                     <div class="stat-value" id="avgTime">-s</div>
                     <div class="stat-label">Avg. Time on Page</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="bounceRate">-%</div>
+                    <div class="stat-label">Bounce Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completionRate">-%</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
             </div>
 
             <!-- Top Section -->
             <div class="chart-section">
                 <h2>🎯 Most Viewed Section</h2>
                 <p id="topSection" style="font-size: 18px; color: #667eea; font-weight: 600;">-</p>
+            </div>
+
+            <!-- Daily Trend -->
+            <div class="chart-section">
+                <h2>📈 Daily Session Trend</h2>
+                <div class="trend-chart" id="dailyTrendChart"></div>
             </div>
 
             <!-- Device Stats -->
@@ -293,6 +380,7 @@
             : 'https://api.jan-huelsbrink.de/api/analytics';
 
         let currentPassword = null;
+        let currentPeriod = 'week';
 
         // Handle login
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -329,17 +417,56 @@
             document.getElementById('errorMsg').style.display = 'none';
         }
 
+        function setPeriod(period) {
+            currentPeriod = period;
+
+            // Update button styles
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-period="${period}"]`).classList.add('active');
+
+            // Reload analytics with new period
+            if (currentPassword) {
+                loadAnalytics(currentPassword);
+            }
+        }
+
         async function loadAnalytics(password) {
             try {
-                const response = await fetch(`${API_URL}/stats?password=${encodeURIComponent(password)}`);
+                const response = await fetch(`${API_URL}/stats?password=${encodeURIComponent(password)}&period=${currentPeriod}`);
                 const data = await response.json();
 
                 // Update overview stats
-                document.getElementById('totalVisitors').textContent = data.visitors;
+                document.getElementById('totalSessions').textContent = data.sessions;
                 document.getElementById('totalVisits').textContent = data.visits;
                 document.getElementById('avgScroll').textContent = data.avgScroll + '%';
                 document.getElementById('avgTime').textContent = data.avgTime + 's';
+                document.getElementById('bounceRate').textContent = data.bounceRate + '%';
+                document.getElementById('completionRate').textContent = data.completionRate + '%';
                 document.getElementById('topSection').textContent = data.topSection;
+
+                // Daily trend chart
+                const dailyTrendChart = document.getElementById('dailyTrendChart');
+                dailyTrendChart.innerHTML = '';
+                if (data.dailyTrend && data.dailyTrend.length > 0) {
+                    const maxSessions = Math.max(...data.dailyTrend.map(d => d.sessions), 1);
+                    data.dailyTrend.forEach(trend => {
+                        const date = new Date(trend.date);
+                        const dateStr = date.toLocaleDateString('de-DE', { month: 'short', day: 'numeric' });
+                        const width = (trend.sessions / maxSessions) * 100;
+                        dailyTrendChart.innerHTML += `
+                            <div class="trend-item">
+                                <div class="trend-date">${dateStr}</div>
+                                <div class="trend-bar" style="width: ${width}%">
+                                    <span class="trend-value">${trend.sessions} sessions</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    dailyTrendChart.innerHTML = '<p style="color: #999; font-size: 14px;">No data available for selected period</p>';
+                }
 
                 // Device chart
                 const deviceChart = document.getElementById('deviceChart');
@@ -402,7 +529,7 @@
             if (currentPassword) {
                 loadAnalytics(currentPassword);
             }
-        }, 30000);
+        }, 5000);
     </script>
 </body>
 </html>

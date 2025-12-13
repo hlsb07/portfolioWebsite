@@ -17,8 +17,9 @@ builder.Services.AddDbContext<AnalyticsDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 // Register custom services
-builder.Services.AddScoped<AnonymousIdService>();
-builder.Services.AddScoped<DeviceDetectionService>();
+builder.Services.AddScoped<SessionService>();
+builder.Services.AddScoped<AggregationService>();
+builder.Services.AddHostedService<DataRetentionBackgroundService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -29,10 +30,33 @@ builder.Services.AddCors(options =>
 
         if (isDevelopment)
         {
-            // Development: Allow all origins for testing
-            policy.AllowAnyOrigin()
+            // Development: Allow all local network origins for testing
+            policy.SetIsOriginAllowed(origin =>
+                  {
+                      var uri = new Uri(origin);
+                      var host = uri.Host;
+
+                      // Allow localhost
+                      if (host == "localhost" || host == "127.0.0.1")
+                          return true;
+
+                      // Allow local network IPs (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+                      if (System.Text.RegularExpressions.Regex.IsMatch(host, @"^192\.168\.\d{1,3}\.\d{1,3}$"))
+                          return true;
+                      if (System.Text.RegularExpressions.Regex.IsMatch(host, @"^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$"))
+                          return true;
+                      if (System.Text.RegularExpressions.Regex.IsMatch(host, @"^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$"))
+                          return true;
+
+                      // Allow .local domains and machine names with hyphens (e.g., surface-jan)
+                      if (host.EndsWith(".local") || host.Contains("-"))
+                          return true;
+
+                      return false;
+                  })
                   .AllowAnyMethod()
-                  .AllowAnyHeader();
+                  .AllowAnyHeader()
+                  .AllowCredentials();
         }
         else
         {
@@ -62,21 +86,13 @@ if (app.Environment.IsDevelopment())
 // Apply CORS policy
 app.UseCors("AnalyticsPolicy");
 
-// Ensure database is created (in production, use migrations instead)
+// Apply database migrations
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AnalyticsDbContext>();
 
-    if (app.Environment.IsDevelopment())
-    {
-        // Auto-create database in development
-        dbContext.Database.EnsureCreated();
-    }
-    else
-    {
-        // Apply migrations in production
-        dbContext.Database.Migrate();
-    }
+    // Always use migrations (ensures schema stays in sync)
+    dbContext.Database.Migrate();
 }
 
 app.UseHttpsRedirection();

@@ -5,7 +5,7 @@ namespace PortfolioAnalytics.Data;
 
 /// <summary>
 /// Database context for portfolio analytics
-/// Handles all database operations for tracking visitor behavior in a GDPR-compliant manner
+/// Handles session-based, GDPR-compliant tracking with data retention policies
 /// </summary>
 public class AnalyticsDbContext : DbContext
 {
@@ -14,39 +14,44 @@ public class AnalyticsDbContext : DbContext
     {
     }
 
-    public DbSet<Visitor> Visitors => Set<Visitor>();
+    public DbSet<Session> Sessions => Set<Session>();
     public DbSet<Visit> Visits => Set<Visit>();
     public DbSet<ScrollEvent> ScrollEvents => Set<ScrollEvent>();
     public DbSet<SectionEvent> SectionEvents => Set<SectionEvent>();
-    public DbSet<DeviceInfo> DeviceInfos => Set<DeviceInfo>();
+    public DbSet<DailyAggregate> DailyAggregates => Set<DailyAggregate>();
+    public DbSet<WeeklyAggregate> WeeklyAggregates => Set<WeeklyAggregate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Visitor configuration
-        modelBuilder.Entity<Visitor>(entity =>
+        // Session configuration
+        modelBuilder.Entity<Session>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.AnonymousIdHash).IsUnique();
-            entity.Property(e => e.AnonymousIdHash).HasMaxLength(64); // SHA-256 produces 64 hex characters
-            entity.Property(e => e.FirstSeen).HasDefaultValueSql("NOW()");
-            entity.Property(e => e.LastSeen).HasDefaultValueSql("NOW()");
+            entity.HasIndex(e => e.SessionId).IsUnique();
+            entity.HasIndex(e => e.CreatedAt);
+            entity.HasIndex(e => e.ExpiresAt);
+            entity.Property(e => e.SessionId).HasMaxLength(36); // UUID length
+            entity.Property(e => e.DeviceCategory).HasMaxLength(50);
+            entity.Property(e => e.BrowserFamily).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+            entity.Property(e => e.LastActivity).HasDefaultValueSql("NOW()");
         });
 
         // Visit configuration
         modelBuilder.Entity<Visit>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.VisitorId);
+            entity.HasIndex(e => e.SessionId);
             entity.HasIndex(e => e.Timestamp);
             entity.Property(e => e.Page).HasMaxLength(500);
             entity.Property(e => e.Referrer).HasMaxLength(1000);
             entity.Property(e => e.Timestamp).HasDefaultValueSql("NOW()");
 
-            entity.HasOne(e => e.Visitor)
-                  .WithMany(v => v.Visits)
-                  .HasForeignKey(e => e.VisitorId)
+            entity.HasOne(e => e.Session)
+                  .WithMany(s => s.Visits)
+                  .HasForeignKey(e => e.SessionId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -55,6 +60,7 @@ public class AnalyticsDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.VisitId);
+            entity.HasIndex(e => e.Timestamp);
             entity.Property(e => e.Timestamp).HasDefaultValueSql("NOW()");
 
             entity.HasOne(e => e.Visit)
@@ -69,6 +75,7 @@ public class AnalyticsDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.VisitId);
             entity.HasIndex(e => e.SectionName);
+            entity.HasIndex(e => e.Timestamp);
             entity.Property(e => e.SectionName).HasMaxLength(100);
             entity.Property(e => e.Timestamp).HasDefaultValueSql("NOW()");
 
@@ -78,22 +85,24 @@ public class AnalyticsDbContext : DbContext
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // DeviceInfo configuration
-        modelBuilder.Entity<DeviceInfo>(entity =>
+        // DailyAggregate configuration
+        modelBuilder.Entity<DailyAggregate>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.VisitorId);
-            entity.Property(e => e.BrowserFamily).HasMaxLength(100);
-            entity.Property(e => e.BrowserVersion).HasMaxLength(50);
-            entity.Property(e => e.OSFamily).HasMaxLength(100);
-            entity.Property(e => e.OSVersion).HasMaxLength(50);
-            entity.Property(e => e.DeviceType).HasMaxLength(50);
-            entity.Property(e => e.FirstSeen).HasDefaultValueSql("NOW()");
+            entity.HasIndex(e => e.Date).IsUnique();
+            entity.Property(e => e.BrowserBreakdownJson).HasColumnType("jsonb");
+            entity.Property(e => e.SectionMetricsJson).HasColumnType("jsonb");
+            entity.Property(e => e.AggregatedAt).HasDefaultValueSql("NOW()");
+        });
 
-            entity.HasOne(e => e.Visitor)
-                  .WithMany(v => v.DeviceInfos)
-                  .HasForeignKey(e => e.VisitorId)
-                  .OnDelete(DeleteBehavior.Cascade);
+        // WeeklyAggregate configuration
+        modelBuilder.Entity<WeeklyAggregate>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.Year, e.WeekNumber }).IsUnique();
+            entity.Property(e => e.BrowserBreakdownJson).HasColumnType("jsonb");
+            entity.Property(e => e.SectionMetricsJson).HasColumnType("jsonb");
+            entity.Property(e => e.AggregatedAt).HasDefaultValueSql("NOW()");
         });
     }
 }

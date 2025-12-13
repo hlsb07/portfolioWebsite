@@ -5,7 +5,10 @@
       "Bash(if [ -f threeText.html ])",
       "Bash(then echo \"exists\")",
       "Bash(else echo \"not found\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(dotnet ef:*)",
+      "Bash(curl:*)",
+      "Bash(docker exec:*)"
     ],
     "deny": [],
     "ask": []
