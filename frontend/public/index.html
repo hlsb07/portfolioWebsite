@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Portfolio - Vom SPS-Programmierer zum Webentwickler</title>
+    <title>Portfolio - Jan Hülsbrink</title>
     <meta name="description" content="One-Page Portfolio: Projekte, Lebenslauf und Kontakt. Vom SPS/PLC-Programmierer zum Web-/Frontend-Entwickler." />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
@@ -163,7 +163,7 @@
           <div class="hero-copy">
             <div class="hero-text">
               <div>
-                <h1>Vom SPS‑Programmierer zum Webentwickler</h1>
+                <h1>Vom SPS‑Programmierer zum Softwareentwickler</h1>
                 <p class="lead">
                   Der Weg ist das Ziel....
                   <i class="fa-solid fa-gears"></i>
@@ -221,10 +221,9 @@
         </div>
         <div class="about-content hidden slide-right">
           <p>
-            Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit
-            als SPS-Programmierer habe ich erkannt, dass meine Leidenschaft stärker in der
-            Softwareentwicklung liegt. Mich reizt besonders die kreative, interaktive und
-            konzeptionelle Arbeit mit Software.
+            Nach meinem dualen Studium der Elektrotechnik – Automation und meiner Tätigkeit als SPS-Programmierer 
+            habe ich mich bewusst für eine berufliche Neuorientierung hin zur Softwareentwicklung entschieden. 
+            Mein Ziel ist es, mich als Frontend- bzw. Fullstackentwickler weiterzuentwickeln.
           </p>
   
           <p>
@@ -265,22 +264,22 @@
               <img class="statement-img" src="./images/IMG_0171.jpg" alt="Wandern in den Bergen – Verbindung von Natur und Freiheit" />
               <h3>🌿 Zwischen Natur und Technologie</h3>
               <p>Ich finde Ruhe in der Natur und Inspiration in der Technik.</p>
-              <p>Ehrliche Gespräche bringen mehr als perfekte Phrasen.</p>
-              <p>Ich arbeite gern mit Menschen, die Struktur geben und Ideen zulassen.</p>
+              <p>Ich schätze offene, direkte Kommunikation statt leerer Floskeln.</p>
+              <p>Ich arbeite gern mit erfahrenen Kolleg:innen zusammen, übernehme bewährte Strukturen und bringe eigene Ideen aktiv ein.</p>
             </article>
             <article class="card statement-card hidden slide-up">
               <img class="statement-img" src="./images/54e4e040-1451-4818-b16a-6babadf9101f.png " alt="Elektronik‑Prototyping – Technik mit Sinn" />
               <h3>⚙️ Technik mit Sinn</h3>
               <p>Ich liebe es, Dinge auszuprobieren, zu verstehen und zu optimieren.</p>
               <p>Technik soll das Leben vereinfachen <br>-> nicht verkomplizieren.</p>
-              <p>Kreativität und Funktion gehören für mich zusammen.</p>
+              <p>Ich möchte Software schaffen, die intuitiv ist und echten Mehrwert bietet.</p>
             </article>
             <article class="card statement-card hidden slide-up">
               <img class="statement-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Code auf Bildschirm – moderne Softwareentwicklung" />
               <h3>💻 Software statt Schaltplan</h3>
-              <p>Vom SPS‑Programmierer zum Softwareentwickler, weil Kreativität überwiegt.</p>
-              <p>Ich denke in Funktionen, aber handle mit Gefühl.</p>
-              <p>Ich möchte Software schaffen, die intuitiv ist und echten Mehrwert bietet.</p>
+               <p>In der SPS-Programmierung kann ich oft erst an der Maschine testen.</p>
+              <p>In der Softwareentwicklung sehe ich das Ergebnis direkt auf meinem Rechner.</p>
+              <p>Dieses direkte Feedback macht Entwicklung für mich spannender und kreativer.</p>
             </article>
           </div>
         </div>
@@ -457,13 +456,14 @@
     
               <div class="closing-feedback">
                 <p>
-                  Geben Sie mir gern ein kurzes, vorläufiges Feedback <br> oder eine umfangreiche <a href="#kontakt">Antwort</a>. 
+                  Geben Sie mir gern ein kurzes, vorläufiges Feedback <br> oder eine umfangreiche <a href="#kontakt">Antwort</a>.
                 </p>
                 <p>
-                  <button type="button" class="btn primary">
+                  <button type="button" id="quick-feedback-btn" class="btn primary">
                     Bewerbung angesehen 👍
                   </button>
                 </p>
+                <p id="quick-feedback-status" class="quick-feedback-status" role="alert" style="display: none;"></p>
             </div>
             </div>
           </div>
@@ -484,12 +484,11 @@
                 eine Nachricht oder vernetzen Sie sich mit mir.
               </p>
               <ul class="contact-list">
-                <li><a href="mailto:dein.name@mail.com">dein.name@mail.com</a></li>
-                <li><a href="#">LinkedIn</a></li>
-                <li><a href="#">GitHub</a></li>
+                <li><a href="mailto:jan.huelsbrink@outlook.de">E-Mail an Jan Hülsbrink</a></li>
+                <li><a href="https://www.linkedin.com/in/jan-h%C3%BClsbrink">LinkedIn</a></li>
               </ul>
             </div>
-            <form class="contact-form" aria-label="Kontaktformular" onsubmit="return false;">
+            <form class="contact-form" aria-label="Kontaktformular">
               <div class="form-row">
                 <label for="f-name">Name</label>
                 <input id="f-name" name="name" type="text" placeholder="Ihr Name" required />
@@ -502,9 +501,13 @@
                 <label for="f-msg">Nachricht</label>
                 <textarea id="f-msg" name="message" rows="4" placeholder="Ihre Nachricht" required></textarea>
               </div>
+              <!-- Honeypot field for spam protection (hidden from users) -->
+              <div class="form-row honeypot" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                <label for="f-website">Website (leave blank)</label>
+                <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              </div>
               <div class="form-actions">
                 <button class="btn primary" type="submit">Nachricht senden</button>
-                <p class="form-note">Hinweis: Ohne Backend – nutzt aktuell keine Übermittlung.</p>
               </div>
             </form>
           </div>
@@ -514,10 +517,10 @@
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p>© <span id="year"></span> Portfolio – Webentwicklung mit Automatisierungs‑DNA</p>
+        <p>© <span id="year"></span> Portfolio – Jan Hülsbrink </p>
         <ul class="footer-links">
           <li><a href="#start">Nach oben</a></li>
-          <li><a href="#">Impressum (Platzhalter)</a></li>
+          <li><a href="imprint.html">Impressum</a></li>
           <li><a href="privacy.html">Datenschutz</a></li>
         </ul>
       </div>
@@ -557,5 +560,7 @@
     <!-- Load consent banner BEFORE analytics -->
     <script src="consent-banner.js"></script>
     <script src="analytics.js"></script>
+    <!-- Contact form handler with SMTP integration -->
+    <script src="contact-form.js"></script>
   </body>
   </html>

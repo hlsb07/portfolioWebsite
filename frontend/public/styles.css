@@ -150,8 +150,10 @@ svg { vertical-align: middle; }
 .hero h1 { font-size: clamp(2rem, 2vw + 2rem, 3rem); line-height: 1.05; margin: 0 0 1rem; letter-spacing: -.8px; width: 60vb;}
 .lead { font-size: var(--step-2); color: var(--muted); }
 .hero-cta { display: flex; gap: .8rem; margin: 1.2rem 0 1.2rem; }
-.btn { display: inline-block; padding: .8rem 1rem; border-radius: .7rem; border: 1px solid var(--line); text-decoration: none; color: var(--text); background: var(--panel); }
+.btn { display: inline-block; padding: .8rem 1rem; border-radius: .7rem; border: 1px solid var(--line); text-decoration: none; color: var(--text); background: var(--panel); cursor: pointer; transition: all 0.2s ease; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border: none; color: white; box-shadow: var(--shadow); }
+.btn.primary:hover { box-shadow: 0 8px 24px rgba(124, 92, 255, 0.4); }
 
 /* Hero icons (diagonale Anordnung) */
 .hero-copy { display: flex; flex-direction: column; justify-content: space-around; gap: 5rem; width: 100%; flex: 1;}
@@ -629,6 +631,122 @@ svg { vertical-align: middle; }
   text-align: center;
 }
 
+/* Form status messages */
+.form-status {
+  display: none;
+  padding: 1rem 1.25rem;
+  border-radius: 0.7rem;
+  font-size: var(--step-0);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  animation: slideDown 0.3s ease;
+}
+
+.form-status--success {
+  background: color-mix(in oklab, #10b981, transparent 90%);
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+
+.form-status--error {
+  background: color-mix(in oklab, #ef4444, transparent 90%);
+  border: 1px solid #ef4444;
+  color: #991b1b;
+}
+
+[data-theme="dark"] .form-status--success {
+  background: color-mix(in oklab, #10b981, transparent 85%);
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .form-status--error {
+  background: color-mix(in oklab, #ef4444, transparent 85%);
+  color: #fca5a5;
+}
+
+/* Loading state for submit button */
+.btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Honeypot field - ensure it's completely hidden */
+.honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Quick feedback button status */
+.quick-feedback-status {
+  display: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.7rem;
+  font-size: var(--step--1);
+  font-weight: 500;
+  margin-top: 0.75rem;
+  text-align: center;
+  animation: slideDown 0.3s ease;
+}
+
+.quick-feedback-status--success {
+  background: color-mix(in oklab, #10b981, transparent 90%);
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+
+.quick-feedback-status--error {
+  background: color-mix(in oklab, #ef4444, transparent 90%);
+  border: 1px solid #ef4444;
+  color: #991b1b;
+}
+
+[data-theme="dark"] .quick-feedback-status--success {
+  background: color-mix(in oklab, #10b981, transparent 85%);
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .quick-feedback-status--error {
+  background: color-mix(in oklab, #ef4444, transparent 85%);
+  color: #fca5a5;
+}
+
 @media (max-width: 768px) {
   .contact-grid {
     grid-template-columns: 1fr;
@@ -671,7 +789,7 @@ svg { vertical-align: middle; }
 
 @media (max-width: 768px) {
   body { font-size: var(--step-0); }
-  .header-inner { flex-wrap: wrap; justify-content: space-between; }
+  .header-inner { display:flex; flex-direction: row; justify-content: space-between; }
   .site-nav { width: 100%; display: flex; justify-content: flex-end; }
   .nav-toggle {
     display: inline-flex;
@@ -725,7 +843,6 @@ svg { vertical-align: middle; }
     position: static;
     top: auto;
     height: auto;
-    padding: 0;
   }
   .hero-inner { align-items: flex-start; }
   .hero h1 { width: 100%; }
@@ -738,7 +855,7 @@ svg { vertical-align: middle; }
     position: static;
     background: none;
     border-bottom: none;
-    padding: 0 0 1rem;
+    
   }
   .feature-projects {
     height: auto;
@@ -899,21 +1016,16 @@ html {
 
 /* Extended heights for scroll space */
 .section.hero {
-  height: 100vh;
   min-height: 100vh;
   padding: 0;
 }
 
 .section.about {
-  height: 100vh;
   min-height: 100vh;
-  padding: 0;
 }
 
 .section.statements {
-  height: 100vh;
   min-height: 100vh;
-  padding: 0;
 }
 
 .section.resume {
@@ -940,11 +1052,10 @@ html {
 .section.statements > .container {
   position: sticky;
   top: 80px;
-  height: calc(100vh - 100px);
+  /* height: calc(100vh - 100px); */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem 0;
 }
 
 /* Resume section: normal flow for scrollable content */
@@ -954,7 +1065,6 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 2rem 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {
