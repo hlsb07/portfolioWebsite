@@ -273,11 +273,11 @@ svg { vertical-align: middle; }
 
 .feature {
   position: absolute;
-  top: 0;
+  top: 10%;
   left: 0;
   right: 0;
-  height: 100%;
-  min-height: clamp(400px, 80vh, 600px);
+  height: 90%;
+  min-height: clamp(200px, 80vh, 400px);
   border-radius: var(--radius);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -300,25 +300,28 @@ svg { vertical-align: middle; }
 }
 .feature::after { content: ""; position: absolute; inset: 0;  pointer-events: none; }
 .feature-block {display: flex; height: 100%; flex-direction: row; justify-content: center; padding: clamp(1rem, 4vw, 3rem);border-radius: var(--radius); background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.25)); color: #fff;}
-.feature-content{ display: flex; flex-direction: column; justify-content: center; z-index: 1; height: 100%; gap: .8rem; padding: clamp(1rem, 4vw, 3rem); color: #fff; }
-.feature-imagesection{display: flex; flex-direction: column; justify-content: center;}
+.feature-content{ display: flex; flex-direction: column; justify-content: center; z-index: 1; height: 100%; gap: .8rem; padding: clamp(1rem, 2vw, 2rem); color: #fff; }
+.feature-imagesection{display: flex; flex-direction: column; justify-content: center; width: 90%;}
 .feature h3 { margin: 0; font-size: clamp(1.2rem, 1.2rem + 1vw, 2rem); }
 .feature .muted { color: #d9dbe1; }
 .feature .btn { border-color: rgba(255,255,255,.35); background: rgba(0,0,0,.2); }
 .feature .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+.feature img { height: 100%; width: 100% ;object-fit: contain;}
 
 /* Hintergrundbilder je Thema */
-/*.project--home { background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; }*/
-.project--camper { background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; }
+/* .project--home { background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
+.project--home { background: url('./images/smarthomeBackground20.png') center/cover no-repeat; }
+/* .project--camper { background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
+.project--camper { background: url('./images/camperRock.JPG') center/cover no-repeat; }
 .project--route { background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; }
 
 /* Statements */
 .statement-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
 .statement-card { flex: 1 1 clamp(260px, 32%, 420px); }
-.statement-card { padding: 0; }
+.statement-card { padding: 0; background-color: var(--line); border-radius: 14px;}
 .statement-card h3 { margin: .9rem 1rem .4rem; }
 .statement-card p { margin: 0 1rem 1rem; color: var(--muted); }
-.statement-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-bottom: 1px solid var(--line); }
+.statement-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-bottom: 1px solid var(--line); border-radius: 14px 14px 0 0; }
 
 /* GitHub Showcase */
 .github-section {
@@ -894,11 +897,10 @@ svg { vertical-align: middle; }
   }
   .feature-imagesection {
     order: -1;
-    margin-bottom: 1rem;
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
-    width: 40%;
+    width: 30%;
   }
   .feature-imagesection img {
     width: 100%;
