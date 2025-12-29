@@ -42,7 +42,7 @@ services:
     ports:
       - "5000:8080"
     depends_on:
-      postgres:
+      portfolio-postgres:
         condition: service_healthy
     networks:
       - proxy-network
