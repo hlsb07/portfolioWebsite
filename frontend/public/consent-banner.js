@@ -99,7 +99,8 @@
             return `${protocol}//${hostname}:5000/api/analytics`;
         }
 
-        return 'https://api.jan-huelsbrink.de/api/analytics';
+        // Use relative URL for production (works with reverse proxy)
+        return '/api/analytics';
     }
 
     /**

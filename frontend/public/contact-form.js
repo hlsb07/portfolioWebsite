@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const apiEndpoint = isDevelopment
     ? 'http://localhost:5000/api/contact/submit'
-    : 'https://app.jan-huelsbrink.de/api/contact/submit'; // Change to your production URL
+    : '/api/contact/submit'; // Use relative URL for production (works with reverse proxy)
 
   // Initialize the contact form handler
   new ContactFormHandler('.contact-form', apiEndpoint);

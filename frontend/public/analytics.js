@@ -48,7 +48,8 @@
                 console.log(`Analytics: Local network detected - hostname: ${hostname}, API: ${apiUrl}`);
                 return apiUrl;
             } else {
-                const prodUrl = 'https://api.jan-huelsbrink.de/api/analytics';
+                // Use relative URL for production (works with reverse proxy)
+                const prodUrl = '/api/analytics';
                 console.log(`Analytics: Production detected - hostname: ${hostname}, API: ${prodUrl}`);
                 return prodUrl;
             }

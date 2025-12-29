@@ -434,7 +434,7 @@
     <script>
         const API_URL = window.location.hostname === 'localhost'
             ? 'http://localhost:5000/api/analytics'
-            : 'https://api.jan-huelsbrink.de/api/analytics';
+            : '/api/analytics'; // Use relative URL for production (works with reverse proxy)
 
         let currentPassword = null;
         let currentPeriod = 'week';
