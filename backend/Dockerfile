@@ -6,7 +6,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 appuser && \
     adduser --system --uid 1001 --ingroup appuser appuser
 
-COPY publish/ .
+COPY PortfolioAnalytics/publish/ .
 
 RUN chown -R appuser:appuser /app
 USER appuser
