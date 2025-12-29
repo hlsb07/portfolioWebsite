@@ -432,9 +432,15 @@
     </div>
 
     <script>
-        const API_URL = window.location.hostname === 'localhost'
-            ? 'http://localhost:5000/api/analytics'
-            : '/api/analytics'; // Use relative URL for production (works with reverse proxy)
+        // Get API URL based on environment
+        const API_URL = (function() {
+            if (window.location.hostname === 'localhost') {
+                return 'http://localhost:5000/api/analytics';
+            }
+            // Get base path from current location (e.g., /portfolio/ or /)
+            const basePath = window.location.pathname.split('/')[1];
+            return basePath ? `/${basePath}/api/analytics` : '/api/analytics';
+        })();
 
         let currentPassword = null;
         let currentPeriod = 'week';

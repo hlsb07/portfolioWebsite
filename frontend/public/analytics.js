@@ -48,9 +48,10 @@
                 console.log(`Analytics: Local network detected - hostname: ${hostname}, API: ${apiUrl}`);
                 return apiUrl;
             } else {
-                // Use relative URL for production (works with reverse proxy)
-                const prodUrl = '/api/analytics';
-                console.log(`Analytics: Production detected - hostname: ${hostname}, API: ${prodUrl}`);
+                // Get base path from current location (e.g., /portfolio/ or /)
+                const basePath = window.location.pathname.split('/')[1];
+                const prodUrl = basePath ? `/${basePath}/api/analytics` : '/api/analytics';
+                console.log(`Analytics: Production detected - hostname: ${hostname}, basePath: ${basePath}, API: ${prodUrl}`);
                 return prodUrl;
             }
         })(),

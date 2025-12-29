@@ -332,9 +332,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.hostname === '127.0.0.1' ||
                         window.location.hostname.includes('192.168');
 
-  const apiEndpoint = isDevelopment
-    ? 'http://localhost:5000/api/contact/submit'
-    : '/api/contact/submit'; // Use relative URL for production (works with reverse proxy)
+  let apiEndpoint;
+  if (isDevelopment) {
+    apiEndpoint = 'http://localhost:5000/api/contact/submit';
+  } else {
+    // Get base path from current location (e.g., /portfolio/ or /)
+    const basePath = window.location.pathname.split('/')[1];
+    apiEndpoint = basePath ? `/${basePath}/api/contact/submit` : '/api/contact/submit';
+  }
 
   // Initialize the contact form handler
   new ContactFormHandler('.contact-form', apiEndpoint);

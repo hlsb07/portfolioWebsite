@@ -99,8 +99,9 @@
             return `${protocol}//${hostname}:5000/api/analytics`;
         }
 
-        // Use relative URL for production (works with reverse proxy)
-        return '/api/analytics';
+        // Get base path from current location (e.g., /portfolio/ or /)
+        const basePath = window.location.pathname.split('/')[1];
+        return basePath ? `/${basePath}/api/analytics` : '/api/analytics';
     }
 
     /**
