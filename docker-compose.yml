@@ -1,6 +1,6 @@
 services:
   # PostgreSQL Database
-  postgres:
+  portfolio-postgres:
     image: postgres:16-alpine
     container_name: portfolio-postgres
     restart: unless-stopped
@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
-      ConnectionStrings__DefaultConnection: "Host=postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__DefaultConnection: "Host=portfolio-postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD}"
       Analytics__ServerSecret: ${ANALYTICS_SERVER_SECRET:-CHANGE_THIS_TO_A_RANDOM_SECRET}
       ANALYTICS_PASSWORD: ${ANALYTICS_PASSWORD:-change-me-in-production}
       SMTP_HOST: ${SMTP_HOST}
