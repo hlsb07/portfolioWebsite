@@ -87,19 +87,23 @@
 
         const hostname = window.location.hostname;
         const protocol = window.location.protocol;
-        const isLocal = hostname === 'localhost' ||
+
+        // Use HTTPS as primary indicator for production
+        // Only use local API if it's HTTP (not HTTPS) AND a local/private IP
+        const isLocal = protocol === 'http:' && (
+            hostname === 'localhost' ||
             hostname === '127.0.0.1' ||
             hostname.endsWith('.local') ||
             /^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
             /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
             /^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
-            hostname.includes('-');
+            hostname.includes('-'));
 
         if (isLocal) {
             return `${protocol}//${hostname}:5000/api/analytics`;
         }
 
-        // Get base path from current location (e.g., /portfolio/ or /)
+        // Production: Use relative URL with base path detection
         const basePath = window.location.pathname.split('/')[1];
         return basePath ? `/${basePath}/api/analytics` : '/api/analytics';
     }

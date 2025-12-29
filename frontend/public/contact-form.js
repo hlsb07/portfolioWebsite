@@ -327,16 +327,24 @@ class QuickFeedbackHandler {
 
 // Initialize contact form and quick feedback when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Determine API endpoint based on environment
-  const isDevelopment = window.location.hostname === 'localhost' ||
-                        window.location.hostname === '127.0.0.1' ||
-                        window.location.hostname.includes('192.168');
+  const hostname = window.location.hostname;
+  const protocol = window.location.protocol;
+
+  // Use HTTPS as primary indicator for production
+  // Only use local API if it's HTTP (not HTTPS) AND a local/private IP
+  const isDevelopment = protocol === 'http:' && (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    /^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
+    /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname) ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$/.test(hostname)
+  );
 
   let apiEndpoint;
   if (isDevelopment) {
     apiEndpoint = 'http://localhost:5000/api/contact/submit';
   } else {
-    // Get base path from current location (e.g., /portfolio/ or /)
+    // Production: Use relative URL with base path detection
     const basePath = window.location.pathname.split('/')[1];
     apiEndpoint = basePath ? `/${basePath}/api/contact/submit` : '/api/contact/submit';
   }
