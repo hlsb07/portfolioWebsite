@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: portfolio_analytics
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_in_production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -29,7 +29,7 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
-      ConnectionStrings__DefaultConnection: "Host=postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD:-change_me_in_production}"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=portfolio_analytics;Username=postgres;Password=${POSTGRES_PASSWORD}"
       Analytics__ServerSecret: ${ANALYTICS_SERVER_SECRET:-CHANGE_THIS_TO_A_RANDOM_SECRET}
       ANALYTICS_PASSWORD: ${ANALYTICS_PASSWORD:-change-me-in-production}
       SMTP_HOST: ${SMTP_HOST}
