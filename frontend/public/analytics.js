@@ -31,34 +31,8 @@
 
     // Configuration
     const CONFIG = {
-        apiBaseUrl: (function() {
-            const hostname = window.location.hostname;
-            const protocol = window.location.protocol;
-
-            // Use HTTPS as primary indicator for production
-            // Only use local API if it's HTTP (not HTTPS) AND a local/private IP
-            const isLocal = protocol === 'http:' && (
-                           hostname === 'localhost' ||
-                           hostname === '127.0.0.1' ||
-                           hostname.endsWith('.local') ||
-                           /^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname) || // 192.168.x.x
-                           /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname) || // 10.x.x.x
-                           /^172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}$/.test(hostname) || // 172.16-31.x.x
-                           hostname.includes('-')); // Surface-Jan, etc.
-
-            if (isLocal) {
-                // Use same hostname as frontend (so iPhone can reach Windows PC backend)
-                const apiUrl = `${protocol}//${hostname}:5000/api/analytics`;
-                console.log(`Analytics: Local network detected - hostname: ${hostname}, API: ${apiUrl}`);
-                return apiUrl;
-            } else {
-                // Production: Use relative URL with base path detection
-                const basePath = window.location.pathname.split('/')[1];
-                const prodUrl = basePath ? `/${basePath}/api/analytics` : '/api/analytics';
-                console.log(`Analytics: Production detected - protocol: ${protocol}, hostname: ${hostname}, basePath: ${basePath}, API: ${prodUrl}`);
-                return prodUrl;
-            }
-        })(),
+        // Always use nginx reverse proxy path
+        apiBaseUrl: '/portfolio/api/analytics',
 
         // Sections to track (based on your portfolio structure)
         sections: ['hero', 'ueber-mich', 'statements', 'projekte', 'lebenslauf', 'abschluss', 'kontakt'],
