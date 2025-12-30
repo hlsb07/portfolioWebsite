@@ -108,18 +108,31 @@ Reply directly to this email to respond to {senderName}.";
     /// <returns>True if email was sent successfully, false otherwise</returns>
     public async Task<bool> SendContactConfirmationEmailAsync(string recipientName, string recipientEmail)
     {
-        var subject = "Thank you for contacting me";
+        var subject = "Vielen Dank für Ihre Nachricht / Thank you for your message";
 
-        var messageContent = $@"Hello {recipientName},
+        var messageContent = $@"
+Hallo {recipientName},
 
-Thank you for reaching out through my portfolio contact form. I have received your message and will get back to you as soon as possible.
+vielen Dank für Ihre Nachricht über mein Portfolio-Kontaktformular.
+Ich habe Ihre Anfrage erhalten und werde mich so schnell wie möglich bei Ihnen melden.
+
+Mit freundlichen Grüßen
+Jan Hülsbrink
+
+---
+Hello {recipientName},
+
+thank you for reaching out through my portfolio contact form.
+I have received your message and will get back to you as soon as possible.
 
 Best regards,
 Jan Hülsbrink
 
 ---
-This is an automated confirmation email. Please do not reply to this message.";
+Dies ist eine automatische Bestätigungs-E-Mail. Bitte antworten Sie nicht auf diese Nachricht.
+This is an automated confirmation email. Please do not reply to this message.
+";
 
-        return await SendEmailAsync(recipientEmail, subject, messageContent);
-    }
+    return await SendEmailAsync(recipientEmail, subject, messageContent);
+}
 }
