@@ -378,7 +378,7 @@
 
   function getCurrentProject() {
     // Detection point at 30% from top (same as sections)
-    const viewportPoint = window.scrollY + window.innerHeight * 0.1;
+    const viewportPoint = window.scrollY + window.innerHeight * 0.5;
     const sectionRect = projectsSection.getBoundingClientRect();
     const sectionTop = window.scrollY + sectionRect.top;
     const sectionHeight = sectionRect.height;
@@ -388,6 +388,8 @@
 
     projects.forEach((_, index) => {
       // Calculate position of each project within the section
+      const switchBias = 0.35; // 0.5 = Mitte, kleiner = früher
+      //const projectPosition = sectionTop + slot * index + slot * switchBias;
       const projectPosition = sectionTop + (sectionHeight / projects.length * index) + (sectionHeight / projects.length / 2);
       const distance = Math.abs(viewportPoint - projectPosition);
 
