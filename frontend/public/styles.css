@@ -354,6 +354,7 @@ svg { vertical-align: middle; }
               0 0 0 1px color-mix(in oklab, var(--brand), transparent 80%);
   transition: all 0.3s ease;
   overflow: hidden;
+  margin: 10px;
 }
 
 .github-featured-card::before {
