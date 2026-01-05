@@ -52,22 +52,6 @@
         document.cookie = cookieString;
     }
 
-    /**
-     * Essential-only UI helpers
-     */
-    function showEssentialOnlyNotice() {
-        const notice = document.getElementById(ESSENTIAL_NOTICE_ID);
-        if (notice) {
-            notice.style.display = 'block';
-        }
-    }
-
-    function hideEssentialOnlyNotice() {
-        const notice = document.getElementById(ESSENTIAL_NOTICE_ID);
-        if (notice) {
-            notice.style.display = 'none';
-        }
-    }
 
     /**
      * Minimal device detection without user-agent parsing
@@ -132,8 +116,6 @@
         } catch (storageError) {
             console.warn('Consent: Unable to clear storage', storageError);
         }
-
-        showEssentialOnlyNotice();
         sendBasicPageViewPing();
     }
 
@@ -153,8 +135,6 @@
             // Delete session cookie if user rejects
             deleteCookie('analytics_session');
             enterEssentialOnlyMode();
-        } else {
-            hideEssentialOnlyNotice();
         }
     }
 

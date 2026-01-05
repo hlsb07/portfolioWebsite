@@ -80,31 +80,6 @@
         background: #d0d0d0;
       }
 
-      #analytics-essential-notice {
-        display: none;
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-        max-width: 320px;
-        background: rgba(15, 23, 42, 0.94);
-        color: #e2e8f0;
-        padding: 12px 14px;
-        border-radius: 10px;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
-        font-size: 14px;
-        line-height: 1.4;
-        z-index: 9999;
-      }
-
-      #analytics-essential-notice strong {
-        display: block;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        color: #cbd5e1;
-        margin-bottom: 6px;
-      }
-
       @media (max-width: 768px) {
         .consent-banner {
           padding: 15px;
@@ -118,10 +93,6 @@
           width: 100%;
         }
 
-        #analytics-essential-notice {
-          left: 16px;
-          right: 16px;
-        }
       }
     </style>
   </head>
@@ -306,10 +277,10 @@
                     Zentrale Steuerung, Dashboards und Benachrichtigungen.
                   </p>
                   <div class="project-links">
-                  <a href="https://www.iobroker.net/" class="btn">ioBroker</a>
-                  <a href="https://mqtt.org/" class="btn">MQTT</a>
-                  <a href="https://de.wikipedia.org/wiki/Network_Attached_Storage" class="btn">NAS</a>
-                  <a href="https://nextcloud.com/" class="btn">Nextcloud</a>
+                  <a href="https://www.iobroker.net/" class="btn" target="_blank">ioBroker</a>
+                  <a href="https://mqtt.org/" class="btn" target="_blank">MQTT</a>
+                  <a href="https://de.wikipedia.org/wiki/Network_Attached_Storage" class="btn" target="_blank">NAS</a>
+                  <a href="https://nextcloud.com/" class="btn" target="_blank">Nextcloud</a>
                   </div> 
                 </div>
                 <div class="feature-imagesection">
@@ -336,10 +307,10 @@
                     Raspberry Pi und ESP32 kommunizieren über MQTT/HTTP mit Sensoren und Aktoren.
                   </p>
                   <div class="project-links">
-                    <a href="https://nodered.org/" class="btn">NodeRed</a>
-                    <a href="https://www.arduino.cc/en/software" class="btn">Arduino</a>
-                    <a href="https://www.modbus.org/" class="btn">Modbus RTU</a>
-                    <a href="https://mqtt.org/" class="btn">MQTT</a>
+                    <a href="https://nodered.org/" class="btn" target="_blank">NodeRed</a>
+                    <a href="https://www.arduino.cc/en/software" class="btn" target="_blank">Arduino</a>
+                    <a href="https://www.modbus.org/" class="btn" target="_blank">Modbus RTU</a>
+                    <a href="https://mqtt.org/" class="btn" target="_blank">MQTT</a>
                   </div>
                 </div>
               </div>
@@ -356,19 +327,19 @@
                       (Marker, Popups, Schnellnavigation).
                     </p>
                   <div class="project-links">
-                    <a href="https://app.jan-huelsbrink.de/roadtriprouteplanner" class="btn primary" aria-label="Live‑Demo">Live Demo</a>
-                    <a href="https://github.com/hlsb07" class="btn" aria-label="Quellcode auf GitHub">Code</a>
+                    <a href="https://app.jan-huelsbrink.de/roadtriprouteplanner" class="btn primary" aria-label="Live‑Demo" target="_blank">Live Demo</a>
+                    <a href="https://github.com/hlsb07" class="btn" aria-label="Quellcode auf GitHub" target="_blank">Code</a>
                   </div>
                 </div>
                 <div class="feature-imagesection">
-                  <img src="images/roadtrip-planner-app.png" alt="Roadtrip Route Planner Web-App">
+                  <img src="images/routeplannerdesktop.png" alt="Roadtrip Route Planner Web-App">
                 </div>
               </article>
             </div>
           </div>
           <div class="github-section">
             <h3 class="section-sub hidden slide-up">Aktuell auf GitHub</h3>
-            <p class="muted hidden slide-up">Meine aktuelle veröffentlichten Projekte</p>
+            <p class="muted hidden slide-up">Meine aktuell veröffentlichten Projekte</p>
             <div id="gh-repos" class="github-showcase hidden fade-only" data-github-user="hlsb07" data-max="3">
               <article class="github-featured-card skeleton">
                 <div class="repo-head"></div>
@@ -414,13 +385,20 @@
               <div class="time">2020 – 2024</div>
               <div class="content">
                 <h3>Bachelor of Engineering – Elektrotechnik Automation (dual)</h3>
-                <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung, Schnittstellen.</p>
+                <p>Westfälische Hochschule, Bocholt. Duale Praxis in der Automatisierungstechnik; Fokus auf Regelung, Steuerung und Schnittstellen.</p>
+              </div>
+            </li>
+            <li class="timeline-item hidden">
+              <div class="time">2020 – 2022</div>
+              <div class="content">
+                <h3>Ausbildung zum Elektroniker für Betriebstechnik</h3>
+                <p>Lebbing automation \& drives GmbH</p>
               </div>
             </li>
             <li class="timeline-item hidden">
               <div class="time">2017 – 2020</div>
               <div class="content">
-                <h3>Allgemeine Hochschulreife Ingenierwissenschaften</h3>
+                <h3>Allgemeine Hochschulreife Ingenieurwissenschaften</h3>
                 <p>Berufskolleg, Borken.</p>
               </div>
             </li>
@@ -483,7 +461,7 @@
               </p>
               <ul class="contact-list">
                 <li><a href="mailto:jan.huelsbrink@outlook.de">E-Mail an Jan Hülsbrink</a></li>
-                <li><a href="https://www.linkedin.com/in/jan-h%C3%BClsbrink">LinkedIn</a></li>
+                <li><a href="https://www.linkedin.com/in/jan-h%C3%BClsbrink" target="_blank">LinkedIn</a></li>
               </ul>
             </div>
             <form class="contact-form" aria-label="Kontaktformular">
@@ -518,8 +496,8 @@
         <p>© <span id="year"></span> Portfolio – Jan Hülsbrink </p>
         <ul class="footer-links">
           <li><a href="#start">Nach oben</a></li>
-          <li><a href="imprint.html">Impressum</a></li>
-          <li><a href="privacy.html">Datenschutz</a></li>
+          <li><a href="imprint.html" target="_blank">Impressum</a></li>
+          <li><a href="privacy.html" target="_blank">Datenschutz</a></li>
         </ul>
       </div>
     </footer>
@@ -541,17 +519,6 @@
           <button id="consent-reject" class="consent-btn consent-reject">Ablehnen</button>
         </div>
       </div>
-    </div>
-
-    <div
-      id="analytics-essential-notice"
-      role="status"
-      aria-live="polite"
-      aria-label="Hinweis: Analytik abgelehnt"
-      style="display: none;"
-    >
-      <strong>Essentieller Modus</strong>
-      You rejected analytics. Only essential operational logging is active.
     </div>
 
     <script src="script.js"></script>

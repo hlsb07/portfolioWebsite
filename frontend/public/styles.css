@@ -11,8 +11,8 @@
   --brand-2-mix: #e7e9ee;
   --line: #22232b;
 
-  --radius: 14px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --radius: 14px;  
+  --shadow: 0 10px 30px rgba(114, 114, 114, 0.3);
   --container: 1100px;
 
   --step-0: clamp(0.88rem, 0.82rem + 0.25vw, 1rem);
@@ -26,11 +26,13 @@
   --bg: #f7f8fb;
   --panel: #ffffff;
   --text: #0e0f14;
+  --textwhite: #e7e9ee;
   --muted: #5b6270;
   --brand: #7c5cff;
   --brand-2: #2dd4bf;
   --brand-2-mix: #64acce;
-  --line: #e7e8ee;
+  --line: #e7e8ee;  
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 /* Base */
@@ -254,7 +256,7 @@ svg { vertical-align: middle; }
 .project-grid > .project, .project-grid > .card { flex: 1 1 clamp(240px, 32%, 360px); }
 .tag { font-size: var(--step-0); color: var(--muted); border: 1px dashed var(--line); padding: .25rem .5rem; border-radius: .5rem; }
 .project-links { display: flex; gap: .8rem; margin-top: .8rem; }
-.project-links a { color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--line); }
+.project-links a { color: var(--textwhite); text-decoration: none; border-bottom: 1px dashed var(--line); }
 
 /* Feature Projects (volle Breite, thematischer Hintergrund) */
 .feature-projects {
@@ -299,14 +301,40 @@ svg { vertical-align: middle; }
   transform: translateX(100%); /* Waiting off-screen right */
 }
 .feature::after { content: ""; position: absolute; inset: 0;  pointer-events: none; }
-.feature-block {display: flex; height: 100%; flex-direction: row; justify-content: center; padding: clamp(1rem, 4vw, 3rem);border-radius: var(--radius); background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.25)); color: #fff;}
-.feature-content{ display: flex; flex-direction: column; justify-content: center; z-index: 1; height: 100%; gap: .8rem; padding: clamp(1rem, 2vw, 2rem); color: #fff; }
-.feature-imagesection{display: flex; flex-direction: column; justify-content: center; width: 90%;}
+.feature-block {display: flex; height: 100%; flex-direction: row; justify-content: center; align-items: stretch; padding: clamp(1rem, 4vw, 3rem); gap: clamp(1.5rem, 3vw, 3rem); border-radius: var(--radius); background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.25)); color: #fff;}
+.feature-content{ display: flex; flex-direction: column; justify-content: center; z-index: 1; height: 100%; gap: .8rem; padding: clamp(1rem, 2vw, 2rem); color: #fff; flex: 1 1 auto; }
+.feature-imagesection{display: flex; flex-direction: column; justify-content: center;}
 .feature h3 { margin: 0; font-size: clamp(1.2rem, 1.2rem + 1vw, 2rem); }
 .feature .muted { color: #d9dbe1; }
 .feature .btn { border-color: rgba(255,255,255,.35); background: rgba(0,0,0,.2); }
 .feature .btn.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
 .feature img { height: 100%; width: 100% ;object-fit: contain;}
+
+/* Project-specific flex ratios for dynamic layouts */
+
+/* Project 1: Home Automation - Balanced layout */
+.project--home .feature-content {
+  flex: 1 1 50%;
+}
+.project--home .feature-imagesection {
+  flex: 1 1 50%;
+}
+
+/* Project 2: Camper Dashboard - Image showcase */
+.project--camper .feature-content {
+  flex: 1 1 35%;
+}
+.project--camper .feature-imagesection {
+  flex: 1 1 65%;
+}
+
+/* Project 3: Route Planner - Content-heavy */
+.project--route .feature-content {
+  flex: 1 1 55%;
+}
+.project--route .feature-imagesection {
+  flex: 1 1 45%;
+}
 
 /* Hintergrundbilder je Thema */
 /* .project--home { background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
@@ -878,6 +906,13 @@ svg { vertical-align: middle; }
     border-top: none;
     padding: 2rem 0;
   }
+  .github-showcase {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
   .feature-projects .feature {
     position: relative;
     transform: none !important;
@@ -887,26 +922,28 @@ svg { vertical-align: middle; }
     transition: none;
   }
   .feature-block {
-    flex-direction: row;
+    flex-direction: column;
     text-align: left;
-    padding: 0.5rem;
-    gap: 1rem;
+    padding: 1rem;
+    gap: 1.2rem;
   }
   .feature-content {
-    width: 60%;
+    width: 100%;
+    flex: 1 1 100%;
     gap: .6rem;
   }
   .feature-imagesection {
     order: -1;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
+    width: 100%;
+    flex: 0 1 auto;
+    max-width: 100%;
+    margin: 0 auto;
   }
   .feature-imagesection img {
     width: 100%;
     height: auto;
     max-width: 100%;
+    object-fit: contain;
   }
 
   /* Smaller project links on mobile */
