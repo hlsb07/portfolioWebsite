@@ -248,7 +248,7 @@ svg { vertical-align: middle; }
 .about-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
 .about-list li { background: var(--panel); border: 1px solid var(--line); padding: .7rem .9rem; border-radius: .7rem; }
 .portrait {display: flex; flex-direction: column; align-items: center; gap: .6rem; }
-.portrait img { width: clamp(140px, 28vw, 220px); height: auto; aspect-ratio: 1 / 1; object-fit:scale-down; border-radius: 999px; border: 2px solid var(--line); box-shadow: var(--shadow); background-color: #474546;}
+.portrait img { width: clamp(140px, 28vw, 220px); height: auto; aspect-ratio: 1 / 1; object-fit:scale-down; border-radius: 999px; border: 2px solid var(--line); box-shadow: var(--shadow); background-color: #323133db;}
 
 
 /* Projects */
@@ -809,7 +809,7 @@ svg { vertical-align: middle; }
   transform: translateY(0);
 }
 
-.footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem 0; }
+.footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .footer-links { list-style: none; padding: 0; margin: 0; display: flex; gap: .9rem; }
 .footer-links a { color: var(--muted); text-decoration: none; }
 
