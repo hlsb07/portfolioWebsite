@@ -355,7 +355,7 @@ svg { vertical-align: middle; }
 .github-section {
   padding: 1.5rem 0;
   border-top: 1px solid var(--line);
-  min-height: 80vh;
+  min-height: 50vh;
   background: color-mix(in oklab, var(--bg), transparent 8%);
 }
 
@@ -1096,7 +1096,7 @@ svg { vertical-align: middle; }
 /* Disable scroll-snap on small screens (mobile) */
 @media (min-width: 769px) {
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y none;
     scroll-behavior: smooth;
   }
 

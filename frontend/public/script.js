@@ -1,5 +1,77 @@
 // Kleine Helfer für Navigation, Scroll‑Status und Theme
 
+function scrollToSectionEnd(section) {
+  const top =
+    window.scrollY +
+    section.getBoundingClientRect().top +
+    section.offsetHeight -
+    window.innerHeight;
+
+  window.scrollTo({
+    top,
+    behavior: 'smooth'
+  });
+}
+
+
+const sections = Array.from(document.querySelectorAll('section.section'));
+let currentIndex = 0;
+let wheelCount = 0;
+let isAnimating = false;
+
+function isAtSectionEnd(section) {
+  const rect = section.getBoundingClientRect();
+  return rect.bottom <= window.innerHeight + 2;
+}
+
+function isAtSectionStart(section) {
+  const rect = section.getBoundingClientRect();
+  return rect.top >= -2;
+}
+
+window.addEventListener('wheel', (e) => {
+  const currentSection = sections[currentIndex];
+
+  // Projekte & GitHub normal scrollen lassen
+  if (e.target.closest('.feature-projects, .github-section')) {
+    return;
+  }
+
+  const scrollingDown = e.deltaY > 0;
+  const scrollingUp = e.deltaY < 0;
+
+  if (scrollingDown && !isAtSectionEnd(currentSection)) return;
+  if (scrollingUp && !isAtSectionStart(currentSection)) return;
+
+  e.preventDefault();
+
+  if (isAnimating) return;
+
+  wheelCount++;
+  if (wheelCount < 2) return;
+
+  wheelCount = 0;
+  isAnimating = true;
+
+  if (scrollingDown && currentIndex < sections.length - 1) {
+    currentIndex++;
+    sections[currentIndex].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+
+  if (scrollingUp && currentIndex > 0) {
+    currentIndex--;
+    scrollToSectionEnd(sections[currentIndex]);
+  }
+
+  setTimeout(() => {
+    isAnimating = false;
+  }, 700);
+}, { passive: false });
+
+
 (function () {
   const doc = document;
 
