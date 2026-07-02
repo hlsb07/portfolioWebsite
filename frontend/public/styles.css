@@ -507,6 +507,65 @@ svg { vertical-align: middle; }
 
 /* Domino/Kick Effect Keyframes */
 
+/* ==========================
+   Technologies
+========================== */
+
+.tech-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+    margin-top:40px;
+}
+
+.tech-card{
+    padding:28px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.tech-card h3{
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.tech-card h3 i{
+    color:var(--brand);
+}
+
+.tech-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.chip{
+    padding:8px 14px;
+    border-radius:999px;
+    background: var(--line);
+    color: var(--text);
+    font-size:.92rem;
+    transition:.25s;
+    cursor:default;
+    border:1px solid transparent;
+}
+
+.chip:hover{
+    transform:translateY(-2px);
+    border-color:var(--brand);
+}
+
+.chip.primary{
+    background: color-mix(in oklab, var(--brand), transparent 85%);
+    color: var(--brand);
+    font-weight:600;
+    border-color: color-mix(in oklab, var(--brand), transparent 65%);
+}
+
 /* Timeline */
 .timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; position: relative; }
 .timeline:before { content: ""; position: absolute; left: 10px; top: .2rem; bottom: .2rem; width: 2px; background: var(--line); }
