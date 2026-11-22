@@ -312,20 +312,31 @@ svg { vertical-align: middle; }
 
 /* Project-specific flex ratios for dynamic layouts */
 
-/* Project 1: Home Automation - Balanced layout */
+/* Technologie-Chips in Projektkarten (ohne Link, auf dunklem Overlay) */
+.project-tech { list-style: none; margin: 0; padding: 0; gap: .5rem; }
+.feature .chip {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  border-color: rgba(255,255,255,.25);
+  font-size: .85rem;
+  padding: 6px 12px;
+}
+.feature .chip:hover { border-color: var(--brand); }
+
+/* Project 1: Smart Home & Camper - Dashboard showcase */
 .project--home .feature-content {
-  flex: 1 1 50%;
+  flex: 1 1 40%;
 }
 .project--home .feature-imagesection {
-  flex: 1 1 50%;
+  flex: 1 1 60%;
 }
 
-/* Project 2: Camper Dashboard - Image showcase */
-.project--camper .feature-content {
-  flex: 1 1 35%;
+/* Project 2: Mobilphotobox - Hochformat-Screenshot */
+.project--photobox .feature-content {
+  flex: 1 1 60%;
 }
-.project--camper .feature-imagesection {
-  flex: 1 1 65%;
+.project--photobox .feature-imagesection {
+  flex: 1 1 40%;
 }
 
 /* Project 3: Route Planner - Content-heavy */
@@ -338,10 +349,12 @@ svg { vertical-align: middle; }
 
 /* Hintergrundbilder je Thema */
 /* .project--home { background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
-.project--home { background: url('./images/smarthomeBackground20.png') center/cover no-repeat; }
+/* .project--home { background: url('./images/smarthomeBackground20.png') center/cover no-repeat; } */
+.project--home { background: radial-gradient(circle at 75% 30%, #1f6f8f 0%, #17323f 45%, #0a0f13 100%); }
 /* .project--camper { background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
-.project--camper { background: url('./images/camperRock.JPG') center/cover no-repeat; }
-.project--route { background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; }
+.project--photobox { background: radial-gradient(circle at 75% 30%, #8a6a2f 0%, #3a2a14 45%, #120d07 100%); }
+/* .project--route { background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; } */
+.project--route { background: radial-gradient(circle at 75% 30%, #3a9c88 0%, #1a4a42 45%, #08130f 100%); }
 
 /* Statements */
 .statement-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
@@ -1003,6 +1016,9 @@ svg { vertical-align: middle; }
     height: auto;
     max-width: 100%;
     object-fit: contain;
+  }
+  .project--photobox .feature-imagesection img {
+    max-height: 30vh;
   }
 
   /* Smaller project links on mobile */
